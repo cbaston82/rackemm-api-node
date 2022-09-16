@@ -1,0 +1,56 @@
+const Media = require('../models/media')
+const { cloudinary } = require('../utils/cloudinary')
+
+const uploadMedia = async (req, res) => {
+    try {
+        const media = req.body.data
+        const response = await cloudinary.uploader.upload(media, {
+            upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+        })
+
+        if (response.secure_url === '') {
+            return res.status(400).json({ error: 'There was an error uploading your image' })
+        }
+
+        const user_id = req.user._id
+        const userMedia = await Media.create({
+            user_id,
+            secureUrl: response.secure_url,
+            publicId: response.public_id,
+            folder: response.folder,
+            createdAt: response.created_at,
+        })
+
+        res.status(200).json(userMedia)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+const getUserMedia = async (req, res) => {
+    try {
+        const user_id = req.user._id
+        const media = await Media.find({ user_id }).sort({ createdAt: -1 })
+        res.status(200).json(media)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+const deleteMedia = async (req, res) => {
+    try {
+        const publicId = req.params.id
+
+        const response = await cloudinary.uploader.destroy(`rackemm_images/${publicId}`)
+        await Media.findOneAndDelete({ publicId: `rackemm_images/${publicId}` })
+        res.status(200).json(response)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
+
+module.exports = {
+    uploadMedia,
+    getUserMedia,
+    deleteMedia,
+}

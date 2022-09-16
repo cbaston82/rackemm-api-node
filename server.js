@@ -31,6 +31,7 @@ const {
 } = require('./controllers/weeklyEventController')
 const { weeklyEventValidator } = require('./validators/weeklyEventValidator')
 const { loginUser, signupUser } = require('./controllers/userController')
+const { uploadMedia, getUserMedia, deleteMedia } = require('./controllers/mediaController')
 
 // connect to db
 mongoose
@@ -45,27 +46,9 @@ const app = express()
 
 // before middleware to get raw payload for stripe verification
 app.post('/api/v1/stripe/webhook', bodyParser.raw({ type: 'application/json' }), webhook)
-app.post('/api/v1/uploads', (req, res) => {
-    if (req.files === null) {
-        return res.status(400).json({ message: 'No file was uploaded' })
-    }
-
-    const file = req.files.file
-
-    file.mv(`${__dirname}/frontend/public/uploads/${file.name}`, (error) => {
-        if (error) {
-            console.log(error)
-
-            return res.status(500).send(error)
-        }
-
-        res.json({ fileName: file.name, filePath: `/uploads/${file.name}` })
-    })
-})
-
 // middleware
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+// app.use(express.urlencoded({ extended: true }))
+app.use(express.json({ limit: '512MB' }))
 app.use(expressValidator())
 
 // open yearly events routes
@@ -101,6 +84,10 @@ app.patch('/api/v1/weekly-events/:id', weeklyEventValidator, updateWeeklyEvent)
 app.post('/api/v1/stripe/create-portal-session', createPortalSession)
 app.post('/api/v1/stripe/checkout-user', checkoutUser)
 app.get('/api/v1/stripe/get-user-stripe-customer', getUserStripeCustomer)
+
+app.post('/api/v1/media/upload', uploadMedia)
+app.get('/api/v1/media/', getUserMedia)
+app.delete('/api/v1/media/:id', deleteMedia)
 
 app.listen(process.env.PORT, () => {
     console.log(`connected to db and listening on port ${process.env.PORT}`)
