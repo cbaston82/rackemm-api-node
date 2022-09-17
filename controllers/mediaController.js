@@ -7,6 +7,7 @@ const uploadMedia = async (req, res) => {
         const response = await cloudinary.uploader.upload(data, {
             upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
             public_id: fileName,
+            transformation: [{ background: 'black', width: 675, height: 1000, crop: 'pad' }],
         })
 
         if (response.secure_url === '') {

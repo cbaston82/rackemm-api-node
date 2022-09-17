@@ -80,6 +80,11 @@ const yearlyEventSchema = new Schema(
             type: Array,
             required: false,
         },
+        posterImage: {
+            type: String,
+            required: false,
+            default: '',
+        },
         user_id: {
             type: String,
             required: true,
