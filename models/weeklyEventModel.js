@@ -70,6 +70,11 @@ const weeklyEventSchema = new Schema(
             type: String,
             required: true,
         },
+        posterImage: {
+            type: String,
+            required: false,
+            default: '',
+        },
         user_id: {
             type: String,
             required: true,

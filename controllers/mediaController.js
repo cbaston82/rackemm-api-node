@@ -3,9 +3,10 @@ const { cloudinary } = require('../utils/cloudinary')
 
 const uploadMedia = async (req, res) => {
     try {
-        const media = req.body.data
-        const response = await cloudinary.uploader.upload(media, {
+        const { data, fileName } = req.body
+        const response = await cloudinary.uploader.upload(data, {
             upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+            public_id: fileName,
         })
 
         if (response.secure_url === '') {
