@@ -32,6 +32,14 @@ const {
 const { weeklyEventValidator } = require('./validators/weeklyEventValidator')
 const { loginUser, signupUser } = require('./controllers/userController')
 const { uploadMedia, getUserMedia, deleteMedia } = require('./controllers/mediaController')
+const {
+    createFilter,
+    getAllFilters,
+    getAFilter,
+    deleteAFilter,
+} = require('./controllers/filtersController')
+const { filterValidator } = require('./validators/filterValidator')
+const Filter = require('./models/filterModel')
 
 // connect to db
 mongoose
@@ -85,9 +93,19 @@ app.post('/api/v1/stripe/create-portal-session', createPortalSession)
 app.post('/api/v1/stripe/checkout-user', checkoutUser)
 app.get('/api/v1/stripe/get-user-stripe-customer', getUserStripeCustomer)
 
+// media routes
 app.post('/api/v1/media/upload', uploadMedia)
 app.get('/api/v1/media/', getUserMedia)
 app.delete('/api/v1/media/:id', deleteMedia)
+
+// filter routes
+app.post('/api/v1/filters', filterValidator, createFilter)
+
+app.get('/api/v1/filters', getAllFilters)
+
+app.get('/api/v1/filters/:id', getAFilter)
+
+app.delete('/api/v1/filters/:id', deleteAFilter)
 
 app.listen(process.env.PORT, () => {
     console.log(`connected to db and listening on port ${process.env.PORT}`)
