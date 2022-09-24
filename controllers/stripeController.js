@@ -2,6 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const YOUR_DOMAIN = process.env.DOMAIN
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 const StripeAccount = require('../models/stripeAccountModel')
+const moment = require('moment')
 
 const getUserStripeCustomer = async (req, res) => {
     const user_id = req.user._id
@@ -49,6 +50,17 @@ const createPortalSession = async (req, res) => {
     res.json(session.url)
 }
 
+function convertDateToUTC(date) {
+    return new Date(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        date.getUTCHours(),
+        date.getUTCMinutes(),
+        date.getUTCSeconds(),
+    )
+}
+
 const webhook = async (req, res) => {
     const payload = req.body
     const sig = req.headers['stripe-signature']
@@ -85,7 +97,9 @@ const webhook = async (req, res) => {
                 {
                     subscriptionId: subscription.id,
                     subscriptionStart: new Date(subscription.current_period_start * 1000),
-                    subscriptionEnd: new Date(subscription.current_period_end * 1000),
+                    subscriptionEnd: new Date(
+                        subscription.current_period_end * 1000,
+                    ).toLocaleString({}),
                     subscriptionPlanId: subscription.plan.id,
                     subscriptionFrequency: subscription.plan.interval,
                     subscriptionStatus: 'incomplete',
@@ -100,8 +114,8 @@ const webhook = async (req, res) => {
                 { customerId: updated.customer },
                 {
                     subscriptionPlanId: updated.plan.id,
-                    subscriptionStart: new Date(updated.current_period_start * 1000),
-                    subscriptionEnd: new Date(updated.current_period_end * 1000),
+                    subscriptionStart: moment(updated.current_period_start * 1000).format(),
+                    subscriptionEnd: moment(updated.current_period_end * 1000).format(),
                 },
             )
             break

@@ -9,10 +9,6 @@ const yearlyEventSchema = new Schema(
             trim: true,
             required: true,
         },
-        bracket: {
-            type: String,
-            trim: true,
-        },
         title: {
             type: String,
             trim: true,
@@ -84,6 +80,10 @@ const yearlyEventSchema = new Schema(
             type: String,
             required: false,
             default: '',
+        },
+        bracket: {
+            type: String,
+            trim: true,
         },
         user_id: {
             type: String,
