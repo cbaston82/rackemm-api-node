@@ -31,18 +31,15 @@ const yearlyEventSchema = new Schema(
             type: Number,
             required: true,
         },
-        startDate: {
+        startTime: {
             type: Date,
         },
-        endDate: {
+        endTime: {
             type: Date,
         },
         game: {
             type: String,
             required: true,
-        },
-        startTime: {
-            type: String,
         },
         venue: {
             type: String,
