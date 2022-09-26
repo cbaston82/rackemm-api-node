@@ -96,10 +96,8 @@ const webhook = async (req, res) => {
                 { customerId: subscription.customer },
                 {
                     subscriptionId: subscription.id,
-                    subscriptionStart: new Date(subscription.current_period_start * 1000),
-                    subscriptionEnd: new Date(
-                        subscription.current_period_end * 1000,
-                    ).toLocaleString({}),
+                    subscriptionStart: subscription.current_period_start,
+                    subscriptionEnd: subscription.current_period_end * 1000,
                     subscriptionPlanId: subscription.plan.id,
                     subscriptionFrequency: subscription.plan.interval,
                     subscriptionStatus: 'incomplete',
@@ -114,8 +112,8 @@ const webhook = async (req, res) => {
                 { customerId: updated.customer },
                 {
                     subscriptionPlanId: updated.plan.id,
-                    subscriptionStart: moment(updated.current_period_start * 1000).format(),
-                    subscriptionEnd: moment(updated.current_period_end * 1000).format(),
+                    subscriptionStart: updated.current_period_start,
+                    subscriptionEnd: updated.current_period_end,
                 },
             )
             break

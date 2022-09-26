@@ -32,10 +32,10 @@ const yearlyEventSchema = new Schema(
             required: true,
         },
         startTime: {
-            type: Date,
+            type: Number,
         },
         endTime: {
-            type: Date,
+            type: Number,
         },
         game: {
             type: String,
