@@ -12,6 +12,10 @@ const weeklyResultSchema = new Schema(
             trim: true,
             required: true,
         },
+        weeklyEvent: {
+            type: Schema.Types.ObjectId,
+            ref: 'WeeklyEvent',
+        },
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
