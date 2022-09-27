@@ -2,6 +2,8 @@ const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const StripeAccount = require('../models/stripeAccountModel')
+const mongoose = require('mongoose')
+const toId = mongoose.Types.ObjectId
 
 const createToken = (_id) => {
     return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' })
@@ -40,7 +42,7 @@ const signupUser = async (req, res) => {
         const token = createToken(user._id)
         const customer = await stripe.customers.create({ email })
         await StripeAccount.create({
-            user_id: user._id,
+            user: toId(user._id),
             user_email: email,
             customerId: customer.id,
         })

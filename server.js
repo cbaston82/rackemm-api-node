@@ -40,6 +40,14 @@ const {
 } = require('./controllers/filtersController')
 const { filterValidator } = require('./validators/filterValidator')
 const Filter = require('./models/filterModel')
+const { weeklyResultsValidator } = require('./validators/weeklyResultsValidator')
+const {
+    getAllWeeklyResults,
+    getWeeklyResults,
+    deleteWeeklyResults,
+    createWeeklyResults,
+    updateWeeklyResults,
+} = require('./controllers/weeklyResultsController')
 
 // connect to db
 mongoose
@@ -66,6 +74,10 @@ app.get('/api/v1/yearly-events/get/:id', getSingleYearlyEvent)
 // open weekly event routes
 app.get('/api/v1/weekly-events/get/', getAllWeeklyEvents)
 app.get('/api/v1/weekly-events/get/:id', getSingleWeeklyEvent)
+
+// open weekly results routes
+// app.get('/api/v1/results/weekly/get/', getAllWeeklyEvents)
+// app.get('/api/v1/results/weekly/get/:id', getSingleWeeklyEvent)
 
 // open user routes
 app.post('/api/v1/user/login', loginUser)
@@ -106,6 +118,12 @@ app.get('/api/v1/filters', getAllFilters)
 app.get('/api/v1/filters/:id', getAFilter)
 
 app.delete('/api/v1/filters/:id', deleteAFilter)
+
+// weekly results
+app.get('/api/v1/results/weekly', getWeeklyResults)
+app.post('/api/v1/results/weekly', weeklyResultsValidator, createWeeklyResults)
+app.delete('/api/v1/results/weekly/:id', deleteWeeklyResults)
+app.patch('/api/v1/results/weekly/:id', weeklyResultsValidator, updateWeeklyResults)
 
 app.listen(process.env.PORT, () => {
     console.log(`connected to db and listening on port ${process.env.PORT}`)

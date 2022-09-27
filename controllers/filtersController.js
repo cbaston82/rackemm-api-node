@@ -1,12 +1,13 @@
 const Filter = require('../models/filterModel')
 const mongoose = require('mongoose')
+const toId = mongoose.Types.ObjectId
 
 const createFilter = async (req, res) => {
     try {
-        const user_id = req.user._id
+        const user = toId(req.user._id)
         const filter = await Filter.create({
             ...req.body,
-            user_id,
+            user,
         })
         res.status(200).json(filter)
     } catch (error) {
@@ -16,8 +17,8 @@ const createFilter = async (req, res) => {
 
 const getAllFilters = async (req, res) => {
     try {
-        const user_id = req.user._id
-        const filters = await Filter.find({ user_id })
+        const user = toId(req.user._id)
+        const filters = await Filter.find({ user })
         res.status(200).json(filters)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -25,11 +26,11 @@ const getAllFilters = async (req, res) => {
 }
 
 const getAFilter = async (req, res) => {
-    const user_id = req.user._id
+    const user = toId(req.user._id)
     const { id } = req.params
 
     try {
-        const filter = await Filter.findOne({ id: id, user_id })
+        const filter = await Filter.findOne({ id: id, user })
         res.status(200).json(filter)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -37,7 +38,7 @@ const getAFilter = async (req, res) => {
 }
 
 const deleteAFilter = async (req, res) => {
-    const user_id = req.user._id
+    const user = toId(req.user._id)
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -45,7 +46,7 @@ const deleteAFilter = async (req, res) => {
     }
 
     try {
-        const filter = await Filter.findOneAndDelete({ _id: id, user_id })
+        const filter = await Filter.findOneAndDelete({ _id: id, user })
         res.status(200).json(filter)
     } catch (error) {
         res.status(400).json({ error: error.message })

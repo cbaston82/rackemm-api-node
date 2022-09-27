@@ -1,5 +1,7 @@
 const Media = require('../models/media')
 const { cloudinary } = require('../utils/cloudinary')
+const mongoose = require('mongoose')
+const toId = mongoose.Types.ObjectId
 
 const uploadMedia = async (req, res) => {
     try {
@@ -14,9 +16,9 @@ const uploadMedia = async (req, res) => {
             return res.status(400).json({ error: 'There was an error uploading your image' })
         }
 
-        const user_id = req.user._id
+        const user = toId(req.user._id)
         const userMedia = await Media.create({
-            user_id,
+            user,
             secureUrl: response.secure_url,
             publicId: response.public_id,
             folder: response.folder,
@@ -31,8 +33,9 @@ const uploadMedia = async (req, res) => {
 
 const getUserMedia = async (req, res) => {
     try {
-        const user_id = req.user._id
-        const media = await Media.find({ user_id }).sort({ createdAt: -1 })
+        const user = req.user._id
+        const media = await Media.find({ user }).sort({ createdAt: -1 })
+
         res.status(200).json(media)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -41,10 +44,13 @@ const getUserMedia = async (req, res) => {
 
 const deleteMedia = async (req, res) => {
     try {
+        const user = req.user._id
         const publicId = req.params.id
 
+        await Media.findOneAndDelete({ user, publicId: `rackemm_images/${publicId}` })
+
         const response = await cloudinary.uploader.destroy(`rackemm_images/${publicId}`)
-        await Media.findOneAndDelete({ publicId: `rackemm_images/${publicId}` })
+
         res.status(200).json(response)
     } catch (error) {
         res.status(400).json({ error: error.message })

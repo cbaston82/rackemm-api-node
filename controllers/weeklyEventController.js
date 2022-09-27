@@ -1,5 +1,6 @@
 const WeeklyEvent = require('../models/weeklyEventModel')
 const mongoose = require('mongoose')
+const toId = mongoose.Types.ObjectId
 
 // get all weekly events public
 const getAllWeeklyEvents = async (req, res) => {
@@ -27,22 +28,22 @@ const getSingleWeeklyEvent = async (req, res) => {
 
 // get all events
 const getWeeklyEvents = async (req, res) => {
-    const user_id = req.user._id
-    const events = await WeeklyEvent.find({ user_id }).sort({ createdAt: -1 })
+    const user = toId(req.user._id)
+    const events = await WeeklyEvent.find({ user }).sort({ createdAt: -1 })
 
     res.status(200).json(events)
 }
 
 // get a single event
 const getWeeklyEvent = async (req, res) => {
-    const user_id = req.user._id
+    const user = req.user._id
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such event' })
     }
 
-    const event = await WeeklyEvent.findOne({ _id: id, user_id })
+    const event = await WeeklyEvent.findOne({ _id: id, user })
 
     if (!event) {
         return res.status(400).json({ error: 'No such event' })
@@ -54,8 +55,9 @@ const getWeeklyEvent = async (req, res) => {
 // create an event
 const createWeeklyEvent = async (req, res) => {
     try {
-        const user_id = req.user._id
-        const event = await WeeklyEvent.create({ ...req.body, user_id })
+        const user = toId(req.user._id)
+        const event = await WeeklyEvent.create({ ...req.body, user })
+
         res.status(200).json(event)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -64,14 +66,14 @@ const createWeeklyEvent = async (req, res) => {
 
 // delete a event
 const deleteWeeklyEvent = async (req, res) => {
-    const user_id = req.user._id
+    const user = req.user._id
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such event' })
     }
 
-    const event = await WeeklyEvent.findOneAndDelete({ _id: id, user_id })
+    const event = await WeeklyEvent.findOneAndDelete({ _id: id, user })
 
     if (!event) {
         return res.status(400).json({ error: 'No such event' })
@@ -82,7 +84,7 @@ const deleteWeeklyEvent = async (req, res) => {
 
 // update a event
 const updateWeeklyEvent = async (req, res) => {
-    const user_id = req.user._id
+    const user = req.user._id
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -90,7 +92,7 @@ const updateWeeklyEvent = async (req, res) => {
     }
 
     const event = await WeeklyEvent.findOneAndUpdate(
-        { _id: id, user_id },
+        { _id: id, user },
         {
             ...req.body,
         },

@@ -14,9 +14,9 @@ const filterSchema = new Schema({
         type: String,
         required: true,
     },
-    user_id: {
-        type: String,
-        required: true,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     },
 })
 

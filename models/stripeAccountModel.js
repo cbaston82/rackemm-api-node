@@ -43,9 +43,9 @@ const stripeAccountSchema = new Schema(
             type: String,
             default: '',
         },
-        user_id: {
-            type: String,
-            required: true,
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
         },
         user_email: {
             type: String,

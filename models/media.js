@@ -18,9 +18,9 @@ const mediaSchema = new Schema({
         type: Date,
         required: true,
     },
-    user_id: {
-        type: String,
-        required: true,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     },
 })
 

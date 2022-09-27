@@ -2,11 +2,12 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const YOUR_DOMAIN = process.env.DOMAIN
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 const StripeAccount = require('../models/stripeAccountModel')
-const moment = require('moment')
+const mongoose = require('mongoose')
+const toId = mongoose.Types.ObjectId
 
 const getUserStripeCustomer = async (req, res) => {
-    const user_id = req.user._id
-    const stripeCustomer = await StripeAccount.findOne({ user_id: user_id })
+    const user = toId(req.user._id)
+    const stripeCustomer = await StripeAccount.findOne({ user })
 
     if (!stripeCustomer) {
         return res.status(400).json({ error: 'No such stripe customer' })
@@ -17,9 +18,10 @@ const getUserStripeCustomer = async (req, res) => {
 
 const checkoutUser = async (req, res) => {
     const priceId = req.body.priceId
+    const user = toId(req.user._id)
 
     try {
-        const { customerId } = await StripeAccount.findOne({ user_id: req.user._id })
+        const { customerId } = await StripeAccount.findOne({ user })
         const session = await stripe.checkout.sessions.create({
             mode: 'subscription',
             payment_method_types: ['card'],

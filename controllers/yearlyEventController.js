@@ -1,6 +1,6 @@
 const YearlyEvent = require('../models/yearlyEventModel')
 const mongoose = require('mongoose')
-const WeeklyEvent = require('../models/weeklyEventModel')
+const toId = mongoose.Types.ObjectId
 
 // get all events public
 const getAllYearlyEvents = async (req, res) => {
@@ -28,23 +28,23 @@ const getSingleYearlyEvent = async (req, res) => {
 
 // get all events
 const getYearlyEvents = async (req, res) => {
-    const user_id = req.user._id
+    const user = toId(req.user._id)
 
-    const events = await YearlyEvent.find({ user_id }).sort({ createdAt: -1 })
+    const events = await YearlyEvent.find({ user }).sort({ createdAt: -1 })
 
     res.status(200).json(events)
 }
 
 // get a single event
 const getYearlyEvent = async (req, res) => {
-    const user_id = req.user._id
+    const user = toId(req.user._id)
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such event' })
     }
 
-    const event = await YearlyEvent.findOne({ _id: id, user_id })
+    const event = await YearlyEvent.findOne({ _id: id, user })
 
     if (!event) {
         return res.status(400).json({ error: 'No such event' })
@@ -56,8 +56,8 @@ const getYearlyEvent = async (req, res) => {
 // create an event
 const createYearlyEvent = async (req, res) => {
     try {
-        const user_id = req.user._id
-        const event = await YearlyEvent.create({ ...req.body, user_id })
+        const user = toId(req.user._id)
+        const event = await YearlyEvent.create({ ...req.body, user })
         res.status(200).json(event)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -66,14 +66,14 @@ const createYearlyEvent = async (req, res) => {
 
 // delete a event
 const deleteYearlyEvent = async (req, res) => {
-    const user_id = req.user._id
+    const user = toId(req.user._id)
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such event' })
     }
 
-    const event = await YearlyEvent.findOneAndDelete({ _id: id, user_id })
+    const event = await YearlyEvent.findOneAndDelete({ _id: id, user })
 
     if (!event) {
         return res.status(400).json({ error: 'No such event' })
@@ -84,7 +84,7 @@ const deleteYearlyEvent = async (req, res) => {
 
 // update a event
 const updateYearlyEvent = async (req, res) => {
-    const user_id = req.user._id
+    const user = toId(req.user._id)
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -92,7 +92,7 @@ const updateYearlyEvent = async (req, res) => {
     }
 
     const event = await YearlyEvent.findOneAndUpdate(
-        { _id: id, user_id },
+        { _id: id, user },
         {
             ...req.body,
         },

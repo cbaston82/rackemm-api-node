@@ -16,6 +16,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
+        select: false,
     },
 })
 
@@ -54,7 +55,7 @@ userSchema.statics.login = async function (email, password) {
         throw Error('All fields must be field')
     }
 
-    const user = await this.findOne({ email })
+    const user = await this.findOne({ email }).select('+password')
 
     if (!user) {
         throw Error('Invalid login credentials')

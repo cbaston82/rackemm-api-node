@@ -75,9 +75,9 @@ const weeklyEventSchema = new Schema(
             required: false,
             default: '',
         },
-        user_id: {
-            type: String,
-            required: true,
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
         },
     },
     {
