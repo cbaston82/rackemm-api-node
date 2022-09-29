@@ -1,9 +1,11 @@
-require('dotenv').config({ path: './.env' })
-let WeeklyEvent = require('../models/weeklyEventModel')
-let YearlyEvent = require('../models/yearlyEventModel')
+/* eslint-disable */
+
+require('dotenv').config({ path: './config.env' })
 const { faker } = require('@faker-js/faker')
 const mongoose = require('mongoose')
 const express = require('express')
+const YearlyEvent = require('../models/yearlyEventModel')
+const WeeklyEvent = require('../models/weeklyEventModel')
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -65,14 +67,14 @@ for (let i = 0; i < 50; i++) {
 }
 
 function randomDate(start, end, startHour, endHour) {
-    let date = new Date(+start + Math.random() * (end - start))
-    let hour = (startHour + Math.random() * (endHour - startHour)) | 0
+    const date = new Date(+start + Math.random() * (end - start))
+    const hour = (startHour + Math.random() * (endHour - startHour)) | 0
     date.setHours(hour)
     return date
 }
 
 function addDays(date, days) {
-    let result = new Date(date)
+    const result = new Date(date)
     result.setDate(result.getDate() + days)
     return result
 }

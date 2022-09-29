@@ -1,15 +1,23 @@
-const WeeklyResult = require('../models/WeeklyResultModel')
 const mongoose = require('mongoose')
+const WeeklyResult = require('../models/WeeklyResultModel')
+
 const toId = mongoose.Types.ObjectId
 
-const getWeeklyResults = async (req, res) => {
-    const user = req.user._id
-    const events = await WeeklyResult.find({ user }).sort({ createdAt: -1 })
+exports.getWeeklyResults = async (req, res) => {
+    console.log(req.user._id)
+    try {
+        console.log(req.user._id)
+        const user = toId(req.user._id)
+        const events = await WeeklyResult.find({ user }).sort({ createdAt: -1 })
 
-    res.status(200).json(events)
+        res.status(200).json(events)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
 }
 
-const createWeeklyResults = async (req, res) => {
+exports.createWeeklyResults = async (req, res) => {
+    console.log(req.user._id)
     try {
         const user = toId(req.user._id)
         const weeklyEvent = toId(req.body.event_id)
@@ -20,7 +28,7 @@ const createWeeklyResults = async (req, res) => {
     }
 }
 
-const deleteWeeklyResults = async (req, res) => {
+exports.deleteWeeklyResults = async (req, res) => {
     const user = req.user._id
     const { id } = req.params
 
@@ -37,7 +45,7 @@ const deleteWeeklyResults = async (req, res) => {
     res.status(200).json(weeklyResults)
 }
 
-const updateWeeklyResults = async (req, res) => {
+exports.updateWeeklyResults = async (req, res) => {
     const user = req.user._id
     const { id } = req.params
 
@@ -50,17 +58,13 @@ const updateWeeklyResults = async (req, res) => {
         {
             ...req.body,
         },
+        {
+            new: true,
+        },
     )
     if (!weeklyResults) {
         return res.status(400).json({ error: 'No such results' })
     }
 
     res.status(200).json(weeklyResults)
-}
-
-module.exports = {
-    createWeeklyResults,
-    getWeeklyResults,
-    deleteWeeklyResults,
-    updateWeeklyResults,
 }

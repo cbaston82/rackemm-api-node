@@ -1,8 +1,9 @@
-const Filter = require('../models/filterModel')
 const mongoose = require('mongoose')
+const Filter = require('../models/filterModel')
+
 const toId = mongoose.Types.ObjectId
 
-const createFilter = async (req, res) => {
+exports.createFilter = async (req, res) => {
     try {
         const user = toId(req.user._id)
         const filter = await Filter.create({
@@ -15,7 +16,7 @@ const createFilter = async (req, res) => {
     }
 }
 
-const getAllFilters = async (req, res) => {
+exports.getAllFilters = async (req, res) => {
     try {
         const user = toId(req.user._id)
         const filters = await Filter.find({ user })
@@ -25,7 +26,7 @@ const getAllFilters = async (req, res) => {
     }
 }
 
-const getAFilter = async (req, res) => {
+exports.getAFilter = async (req, res) => {
     const user = toId(req.user._id)
     const { id } = req.params
 
@@ -37,7 +38,7 @@ const getAFilter = async (req, res) => {
     }
 }
 
-const deleteAFilter = async (req, res) => {
+exports.deleteAFilter = async (req, res) => {
     const user = toId(req.user._id)
     const { id } = req.params
 
@@ -52,5 +53,3 @@ const deleteAFilter = async (req, res) => {
         res.status(400).json({ error: error.message })
     }
 }
-
-module.exports = { createFilter, getAllFilters, getAFilter, deleteAFilter }

@@ -1,11 +1,14 @@
+/* eslint-disable */
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+
 const YOUR_DOMAIN = process.env.DOMAIN
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
-const StripeAccount = require('../models/stripeAccountModel')
 const mongoose = require('mongoose')
+const StripeAccount = require('../models/stripeAccountModel')
+
 const toId = mongoose.Types.ObjectId
 
-const getUserStripeCustomer = async (req, res) => {
+exports.getUserStripeCustomer = async (req, res) => {
     const user = toId(req.user._id)
     const stripeCustomer = await StripeAccount.findOne({ user })
 
@@ -16,8 +19,8 @@ const getUserStripeCustomer = async (req, res) => {
     res.status(200).json(stripeCustomer)
 }
 
-const checkoutUser = async (req, res) => {
-    const priceId = req.body.priceId
+exports.checkoutUser = async (req, res) => {
+    const { priceId } = req.body
     const user = toId(req.user._id)
 
     try {
@@ -41,8 +44,8 @@ const checkoutUser = async (req, res) => {
     }
 }
 
-const createPortalSession = async (req, res) => {
-    let customerId = req.body.customerId
+exports.createPortalSession = async (req, res) => {
+    const { customerId } = req.body
 
     const session = await stripe.billingPortal.sessions.create({
         customer: customerId,
@@ -52,18 +55,7 @@ const createPortalSession = async (req, res) => {
     res.json(session.url)
 }
 
-function convertDateToUTC(date) {
-    return new Date(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
-        date.getUTCHours(),
-        date.getUTCMinutes(),
-        date.getUTCSeconds(),
-    )
-}
-
-const webhook = async (req, res) => {
+exports.webhook = async (req, res) => {
     const payload = req.body
     const sig = req.headers['stripe-signature']
     let event
@@ -75,10 +67,14 @@ const webhook = async (req, res) => {
         return
     }
 
+    let customer
+    let subscription
+    let updated
+
     switch (event.type) {
         case 'customer.created':
             console.log('==== customer.created ====')
-            const customer = event.data.object
+            customer = event.data.object
 
             await StripeAccount.findOneAndUpdate(
                 { user_email: customer.email },
@@ -92,7 +88,7 @@ const webhook = async (req, res) => {
             break
         case 'customer.subscription.created':
             console.log('==== customer.subscription.created ====')
-            const subscription = event.data.object
+            subscription = event.data.object
 
             await StripeAccount.findOneAndUpdate(
                 { customerId: subscription.customer },
@@ -107,7 +103,7 @@ const webhook = async (req, res) => {
             )
             break
         case 'customer.subscription.updated':
-            const updated = event.data.object
+            updated = event.data.object
             console.log('==== customer.subscription.updated ====')
 
             await StripeAccount.findOneAndUpdate(
@@ -123,11 +119,4 @@ const webhook = async (req, res) => {
             console.log(`Unhandled event type ${event.type}`)
     }
     res.send()
-}
-
-module.exports = {
-    checkoutUser,
-    createPortalSession,
-    getUserStripeCustomer,
-    webhook,
 }

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 
-const filterSchema = new Schema({
+const filterSchema = new mongoose.Schema({
     url: {
         type: String,
         required: true,
@@ -15,7 +14,7 @@ const filterSchema = new Schema({
         required: true,
     },
     user: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
 })

@@ -1,9 +1,10 @@
+const mongoose = require('mongoose')
 const Media = require('../models/media')
 const { cloudinary } = require('../utils/cloudinary')
-const mongoose = require('mongoose')
+
 const toId = mongoose.Types.ObjectId
 
-const uploadMedia = async (req, res) => {
+exports.uploadMedia = async (req, res) => {
     try {
         const { data, fileName } = req.body
         const response = await cloudinary.uploader.upload(data, {
@@ -31,7 +32,7 @@ const uploadMedia = async (req, res) => {
     }
 }
 
-const getUserMedia = async (req, res) => {
+exports.getUserMedia = async (req, res) => {
     try {
         const user = req.user._id
         const media = await Media.find({ user }).sort({ createdAt: -1 })
@@ -42,7 +43,7 @@ const getUserMedia = async (req, res) => {
     }
 }
 
-const deleteMedia = async (req, res) => {
+exports.deleteMedia = async (req, res) => {
     try {
         const user = req.user._id
         const publicId = req.params.id
@@ -55,10 +56,4 @@ const deleteMedia = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
-}
-
-module.exports = {
-    uploadMedia,
-    getUserMedia,
-    deleteMedia,
 }
