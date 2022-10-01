@@ -5,6 +5,7 @@ const YOUR_DOMAIN = process.env.DOMAIN
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 const mongoose = require('mongoose')
 const StripeAccount = require('../models/stripeAccountModel')
+const User = require('../models/userModel')
 
 const toId = mongoose.Types.ObjectId
 
@@ -90,7 +91,7 @@ exports.webhook = async (req, res) => {
             console.log('==== customer.subscription.created ====')
             subscription = event.data.object
 
-            await StripeAccount.findOneAndUpdate(
+            const stripeCustomer = await StripeAccount.findOneAndUpdate(
                 { customerId: subscription.customer },
                 {
                     subscriptionId: subscription.id,
@@ -100,6 +101,13 @@ exports.webhook = async (req, res) => {
                     subscriptionFrequency: subscription.plan.interval,
                     subscriptionStatus: 'incomplete',
                 },
+            )
+
+            await User.findOneAndUpdate(
+                {
+                    user: stripeCustomer.user,
+                },
+                { role: 'subscribe-user' },
             )
             break
         case 'customer.subscription.updated':
