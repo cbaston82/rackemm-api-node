@@ -1,6 +1,7 @@
 const crypto = require('crypto')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
+const { millisecondsToSeconds } = require('date-fns')
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -33,6 +34,11 @@ const userSchema = new mongoose.Schema({
     passwordChangedAt: Number,
     passwordResetToken: String,
     passwordResetExpires: Number,
+    active: {
+        type: Boolean,
+        default: true,
+        select: false,
+    },
 })
 
 userSchema.pre('save', async function (next) {
@@ -46,13 +52,12 @@ userSchema.pre('save', async function (next) {
 
 userSchema.pre('save', function (next) {
     if (!this.isModified('password') || this.isNew) return next()
-    this.passwordChangedAt = Math.round(new Date().getTime() / 1000) - 1000
+    this.passwordChangedAt = millisecondsToSeconds(Math.round(new Date().getTime())) - 1000
 
     next()
 })
 
 userSchema.methods.correctPassword = function (passedInPassword, storedPassword) {
-    console.log('comparing')
     return bcrypt.compare(passedInPassword, storedPassword)
 }
 

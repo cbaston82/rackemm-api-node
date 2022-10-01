@@ -35,8 +35,6 @@ exports.requireSignin = async (req, res, next) => {
 exports.restrictTo =
     (...roles) =>
     (req, res, next) => {
-        console.log(roles)
-        console.log(req.user)
         if (!roles.includes(req.user.role)) {
             return res.status(403).json({ error: 'You do not have permission' })
         }

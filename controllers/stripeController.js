@@ -107,7 +107,7 @@ exports.webhook = async (req, res) => {
                 {
                     user: stripeCustomer.user,
                 },
-                { role: 'subscribe-user' },
+                { role: 'subscribed-user' },
             )
             break
         case 'customer.subscription.updated':
