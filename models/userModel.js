@@ -3,43 +3,48 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const { millisecondsToSeconds } = require('date-fns')
 
-const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
+const userSchema = new mongoose.Schema(
+    {
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+        },
+        fullName: {
+            type: String,
+            required: true,
+        },
+        password: {
+            type: String,
+            required: true,
+            select: false,
+        },
+        photo: String,
+        passwordConfirm: {
+            type: String,
+            required: true,
+            select: false,
+        },
+        role: {
+            type: String,
+            required: true,
+            enum: ['free-user', 'subscribed-user', 'admin-user'],
+            default: 'free-user',
+        },
+        passwordChangedAt: Number,
+        passwordResetToken: String,
+        passwordResetExpires: Number,
+        active: {
+            type: Boolean,
+            default: true,
+            select: false,
+        },
     },
-    fullName: {
-        type: String,
-        required: true,
+    {
+        timestamps: true,
     },
-    password: {
-        type: String,
-        required: true,
-        select: false,
-    },
-    photo: String,
-    passwordConfirm: {
-        type: String,
-        required: true,
-        select: false,
-    },
-    role: {
-        type: String,
-        required: true,
-        enum: ['free-user', 'subscribed-user', 'admin-user'],
-        default: 'free-user',
-    },
-    passwordChangedAt: Number,
-    passwordResetToken: String,
-    passwordResetExpires: Number,
-    active: {
-        type: Boolean,
-        default: true,
-        select: false,
-    },
-})
+)
 
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next()

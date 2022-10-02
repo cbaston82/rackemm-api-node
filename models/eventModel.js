@@ -2,26 +2,22 @@ const mongoose = require('mongoose')
 
 const { Schema } = mongoose
 
-const weeklyEventSchema = new Schema(
+const eventSchema = new Schema(
     {
         type: {
             type: String,
             trim: true,
-            required: true,
         },
         title: {
             type: String,
             trim: true,
-            required: true,
         },
         description: {
             type: String,
-            required: true,
         },
         pointOfContact: {
             type: String,
             trim: true,
-            required: true,
         },
         pointOfContactPhone: {
             type: String,
@@ -29,51 +25,46 @@ const weeklyEventSchema = new Schema(
         },
         buyIn: {
             type: Number,
-            required: true,
-        },
-        day: {
-            type: String,
-            required: true,
         },
         game: {
-            type: String,
-            required: true,
-        },
-        startTime: {
             type: String,
         },
         venue: {
             type: String,
-            required: true,
         },
         address: {
             type: String,
-            required: true,
         },
         city: {
             type: String,
-            required: true,
         },
         state: {
             type: String,
-            required: true,
         },
         zipCode: {
             type: String,
-            required: true,
         },
         ratingSystem: {
             type: String,
-            required: true,
-        },
-        status: {
-            type: String,
-            required: true,
         },
         posterImage: {
             type: String,
-            required: false,
-            default: '',
+        },
+        day: {
+            type: String,
+        },
+        startTime: {
+            type: String,
+        },
+        endTime: {
+            type: String,
+        },
+        status: {
+            type: String,
+        },
+        bracket: {
+            type: String,
+            trim: true,
         },
         user: {
             type: Schema.Types.ObjectId,
@@ -82,7 +73,13 @@ const weeklyEventSchema = new Schema(
     },
     {
         timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
     },
 )
 
-module.exports = mongoose.model('WeeklyEvent', weeklyEventSchema)
+eventSchema.virtual('fullAddress').get(function () {
+    return `${this.address}, ${this.city}, ${this.state} ${this.zipCode}`
+})
+
+module.exports = mongoose.model('Event', eventSchema)

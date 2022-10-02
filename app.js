@@ -8,10 +8,8 @@ const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require('hpp')
 const userRouter = require('./routes/userRoutes')
-const weeklyResultsRouter = require('./routes/weeklyResultsRoutes')
 const filterRouter = require('./routes/filterRoutes')
-const yearlyEventRouter = require('./routes/yearlyEventRoutes')
-const weeklyEventRouter = require('./routes/weeklyEventRoutes')
+const eventRouter = require('./routes/eventRoutes')
 const stripeRouter = require('./routes/stripeRoutes')
 const mediaRouter = require('./routes/mediaRoutes')
 const authRouter = require('./routes/authRoutes')
@@ -40,7 +38,7 @@ app.post(
 )
 
 // BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY
-app.use(express.json({ limit: '10kb' }))
+app.use(express.json({ limit: '512MB' }))
 app.use(expressValidator())
 
 // SANITIZE DATA AGAINST NOSQL QUERY INJECTION
@@ -57,11 +55,9 @@ app.use(
 )
 
 // ROUTES
-app.use('/api/v1/yearly-events', yearlyEventRouter)
-app.use('/api/v1/weekly-events', weeklyEventRouter)
+app.use('/api/v1/events', eventRouter)
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user', userRouter)
-app.use('/api/v1/results/weekly', weeklyResultsRouter)
 app.use('/api/v1/filters', filterRouter)
 app.use('/api/v1/stripe', stripeRouter)
 app.use('/api/v1/media', mediaRouter)

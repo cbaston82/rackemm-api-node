@@ -23,7 +23,6 @@ exports.uploadMedia = async (req, res) => {
             secureUrl: response.secure_url,
             publicId: response.public_id,
             folder: response.folder,
-            createdAt: response.created_at,
         })
 
         res.status(200).json(userMedia)

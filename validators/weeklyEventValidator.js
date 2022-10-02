@@ -7,6 +7,7 @@ exports.weeklyEventValidator = (req, res, next) => {
     req.check('day', 'Day is required').notEmpty()
     req.check('venue', 'Venue is required').notEmpty()
     req.check('address', 'Address is required').notEmpty()
+    req.check('startTime', 'Start time is required').notEmpty()
     req.check('city', 'City is required').notEmpty()
     req.check('ratingSystem', 'Rating system is required').notEmpty()
     req.check('game', 'Game is required').notEmpty()

@@ -54,7 +54,7 @@ const stripeAccountSchema = new Schema(
         },
     },
     {
-        timestamps: { createdAt: 'created_on', updatedAt: 'updated_on' },
+        timestamps: true,
     },
 )
 

@@ -45,7 +45,7 @@ const seedData = []
 for (let i = 0; i < 50; i++) {
     seedData.push(
         new WeeklyEvent({
-            type: 'weekly-event',
+            type: 'weekly',
             title: faker.lorem.words(2),
             description: faker.lorem.words(3),
             pointOfContact: faker.name.fullName(),
@@ -84,7 +84,7 @@ function addDays(date, days) {
 //     let dateEnd = addDays(dateStart, 1)
 //     seedData.push(
 //         new YearlyEvent({
-//             type: 'yearly-event',
+//             type: 'yearly',
 //             title: faker.lorem.words(2),
 //             description: faker.lorem.words(3),
 //             pointOfContact: faker.name.fullName(),
