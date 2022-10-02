@@ -41,39 +41,29 @@ router.patch(
 )
 
 // AUTH YEARLY
-router
-    .route('/yearly-events')
-    .post(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
-        yearlyEventValidator,
-        eventController.createEvent,
-    )
-    .get(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
-        eventsMiddleware.getYearly,
-        eventController.getEvents,
-    )
+router.post(
+    '/yearly-events',
+    authController.requireSignin,
+    authController.restrictTo('subscribed-user', 'admin-user'),
+    yearlyEventValidator,
+    eventController.createEvent,
+)
 
-router
-    .route('/yearly-events/:id')
-    .patch(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
-        yearlyEventValidator,
-        eventController.updateEvent,
-    )
-    .delete(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
-        eventController.deleteEvent,
-    )
-    .get(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
-        eventController.getEvent,
-    )
+router.get(
+    '/yearly-events',
+    authController.requireSignin,
+    authController.restrictTo('subscribed-user', 'admin-user'),
+    eventsMiddleware.getYearly,
+    eventController.getEvents,
+)
+
+router.patch(
+    '/yearly-events/:id',
+    authController.requireSignin,
+    authController.restrictTo('subscribed-user', 'admin-user'),
+    yearlyEventValidator,
+    eventController.updateEvent,
+)
 
 // AUTh GLOBAL
 router.delete(
