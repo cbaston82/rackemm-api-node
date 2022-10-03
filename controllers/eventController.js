@@ -1,154 +1,103 @@
 const mongoose = require('mongoose')
 
 const toId = mongoose.Types.ObjectId
+const catchAsync = require('../utils/catchAsync')
 const Event = require('../models/eventModel')
+const AppError = require('../utils/appError')
 const APIFeatures = require('../utils/apiFeatures')
 
 // public
-exports.getEventsPublic = async (req, res) => {
-    try {
-        const features = new APIFeatures(Event.find(), req.query)
-            .filter()
-            .sort()
-            .limitFields()
-            .paginate()
-            .filter()
+exports.getEventsPublic = catchAsync(async (req, res, next) => {
+    const features = new APIFeatures(Event.find(), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate()
+        .filter()
 
-        const events = await features.query
+    const events = await features.query
 
-        res.status(200).json(events)
-    } catch (error) {
-        res.status(400).json({ error: 'Bad request' })
-    }
-}
+    res.status(200).json({ status: 'success', data: events })
+})
 
-exports.getEventPublic = async (req, res) => {
+exports.getEventPublic = catchAsync(async (req, res, next) => {
     const { id } = req.params
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No such event' })
-    }
 
     const event = await Event.findById(id)
 
-    if (!event) {
-        return res.status(400).json({ error: 'No such event' })
-    }
-
-    res.status(200).json(event)
-}
+    res.status(200).json({ status: 'success', data: event })
+})
 
 // auth
-exports.getEvents = async (req, res) => {
-    try {
-        const features = new APIFeatures(Event.find({ user: toId(req.user._id) }), req.query)
-            .filter()
-            .sort()
-            .limitFields()
-            .paginate()
-            .filter()
+exports.getEvents = catchAsync(async (req, res, next) => {
+    const features = new APIFeatures(Event.find({ user: toId(req.user._id) }), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate()
+        .filter()
 
-        const events = await features.query
+    const events = await features.query
 
-        res.status(200).json(events)
-    } catch (error) {
-        res.status(400).json({ error: error })
-    }
-}
+    res.status(200).json({ status: 'success', data: events })
+})
 
-exports.getEvent = async (req, res) => {
-    try {
-        const user = req.user._id
-        const { id } = req.params
-
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json({ error: 'No such event' })
-        }
-
-        const event = await Event.findOne({ _id: id, user })
-
-        if (!event) {
-            return res.status(400).json({ error: 'No such event' })
-        }
-
-        res.status(200).json(event)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
-
-exports.deleteEvent = async (req, res) => {
-    const user = req.user._id
-    const { id } = req.params
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No such event' })
-    }
-
-    const event = await Event.findOneAndDelete({ _id: id, user })
+exports.getEvent = catchAsync(async (req, res, next) => {
+    const event = await Event.findOne({ _id: req.params.id, user: req.user._id })
 
     if (!event) {
-        return res.status(400).json({ error: 'No such event' })
+        return next(new AppError('No event found with that ID', 404))
     }
 
-    res.status(200).json(event)
-}
+    res.status(200).json({ status: 'success', data: event })
+})
 
-exports.createEvent = async (req, res) => {
-    try {
-        const user = toId(req.user._id)
-        const event = await Event.create({ ...req.body, user })
+exports.deleteEvent = catchAsync(async (req, res, next) => {
+    const event = await Event.findOneAndDelete({ _id: req.params.id, user: req.user._id })
 
-        res.status(200).json(event)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+    if (!event) {
+        return next(new AppError('No event found with that ID', 404))
     }
-}
 
-exports.updateEvent = async (req, res) => {
-    try {
-        const user = req.user._id
-        const { id } = req.params
+    res.status(204).json({ status: 'success', data: null })
+})
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json({ error: 'No such event' })
-        }
+exports.createEvent = catchAsync(async (req, res, next) => {
+    const user = toId(req.user._id)
+    const event = await Event.create({ ...req.body, user })
 
-        const event = await Event.findOneAndUpdate(
-            { _id: id, user },
-            {
-                ...req.body,
-            },
-            {
-                new: true,
-            },
-        )
+    res.status(200).json({ status: 'success', data: event })
+})
 
-        if (!event) {
-            return res.status(400).json({ error: 'No such event' })
-        }
+exports.updateEvent = catchAsync(async (req, res, next) => {
+    const event = await Event.findOneAndUpdate(
+        { _id: req.params.id, user: req.user._id },
+        {
+            ...req.body,
+        },
+        {
+            new: true,
+        },
+    )
 
-        res.status(200).json(event)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+    if (!event) {
+        return next(new AppError('No event found with that ID', 404))
     }
-}
 
-exports.getEventStats = async (req, res) => {
-    try {
-        const stats = await Event.aggregate([
-            {
-                $match: { buyIn: { $gt: 5 } },
+    res.status(200).json({ status: 'success', data: event })
+})
+
+exports.getEventStats = catchAsync(async (req, res, next) => {
+    const stats = await Event.aggregate([
+        {
+            $match: { buyIn: { $gt: 5 } },
+        },
+        {
+            $group: {
+                _id: '$type',
+                avgBuyIn: { $avg: '$buyIn' },
             },
-            {
-                $group: {
-                    _id: '$type',
-                    avgBuyIn: { $avg: '$buyIn' },
-                },
-            },
-        ])
-        res.status(200).json(stats)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
+        },
+    ])
+    res.status(200).json({ starus: 'success', data: stats })
+})

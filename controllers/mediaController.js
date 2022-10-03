@@ -1,58 +1,53 @@
 const mongoose = require('mongoose')
 const Media = require('../models/media')
+const catchAsync = require('../utils/catchAsync')
 const { cloudinary } = require('../utils/cloudinary')
+const AppError = require('../utils/appError')
 
 const toId = mongoose.Types.ObjectId
 
-exports.uploadMedia = async (req, res) => {
-    try {
-        const { data, fileName } = req.body
-        const response = await cloudinary.uploader.upload(data, {
-            upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
-            public_id: fileName,
-            transformation: [{ background: '#292c31', width: 675, height: 1000, crop: 'pad' }],
-        })
+exports.uploadMedia = catchAsync(async (req, res, next) => {
+    const { data, fileName } = req.body
 
-        if (response.secure_url === '') {
-            return res.status(400).json({ error: 'There was an error uploading your image' })
-        }
+    const response = await cloudinary.uploader.upload(data, {
+        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+        public_id: fileName,
+        transformation: [{ background: '#292c31', width: 675, height: 1000, crop: 'pad' }],
+    })
 
-        const user = toId(req.user._id)
-        const userMedia = await Media.create({
-            user,
-            secureUrl: response.secure_url,
-            publicId: response.public_id,
-            folder: response.folder,
-        })
-
-        res.status(200).json(userMedia)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+    if (response.secure_url === '') {
+        return next(new AppError('There was an error uploading your image', 400))
     }
-}
 
-exports.getUserMedia = async (req, res) => {
-    try {
-        const user = req.user._id
-        const media = await Media.find({ user }).sort({ createdAt: -1 })
+    const userMedia = await Media.create({
+        user: toId(req.user._id),
+        secureUrl: response.secure_url,
+        publicId: response.public_id,
+        folder: response.folder,
+    })
 
-        res.status(200).json(media)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+    res.status(200).json({ status: 'success', data: userMedia })
+})
+
+exports.getUserMedia = catchAsync(async (req, res, next) => {
+    const media = await Media.find({ user: toId(req.user._id) }).sort({ createdAt: -1 })
+
+    res.status(200).json({ status: 'success', data: media })
+})
+
+exports.deleteMedia = catchAsync(async (req, res, next) => {
+    const publicId = req.params.id
+
+    const media = await Media.findOneAndDelete({
+        user: toId(req.user._id),
+        publicId: `rackemm_images/${publicId}`,
+    })
+
+    if (!media) {
+        return next(new AppError('Something went wrong'))
     }
-}
 
-exports.deleteMedia = async (req, res) => {
-    try {
-        const user = req.user._id
-        const publicId = req.params.id
+    const response = await cloudinary.uploader.destroy(`rackemm_images/${publicId}`)
 
-        await Media.findOneAndDelete({ user, publicId: `rackemm_images/${publicId}` })
-
-        const response = await cloudinary.uploader.destroy(`rackemm_images/${publicId}`)
-
-        res.status(200).json(response)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
+    res.status(200).json({ status: 'success', data: response })
+})

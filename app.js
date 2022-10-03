@@ -7,6 +7,8 @@ const helmet = require('helmet')
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require('hpp')
+const AppError = require('./utils/appError')
+const globalErrorHandler = require('./controllers/errorController')
 const userRouter = require('./routes/userRoutes')
 const filterRouter = require('./routes/filterRoutes')
 const eventRouter = require('./routes/eventRoutes')
@@ -63,7 +65,9 @@ app.use('/api/v1/stripe', stripeRouter)
 app.use('/api/v1/media', mediaRouter)
 
 app.all('*', (req, res, next) => {
-    res.status(404).json({ error: `Can't find ${req.originalUrl}` })
+    next(new AppError(`Can't find ${req.originalUrl}`, 404))
 })
+
+app.use(globalErrorHandler)
 
 module.exports = app

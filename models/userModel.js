@@ -7,17 +7,17 @@ const userSchema = new mongoose.Schema(
     {
         email: {
             type: String,
-            required: true,
+            required: [true, 'Email is required'],
             unique: true,
             lowercase: true,
         },
         fullName: {
             type: String,
-            required: true,
+            required: [true, 'Full name is required'],
         },
         password: {
             type: String,
-            required: true,
+            required: [true, 'Password is required'],
             select: false,
         },
         photo: String,
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            required: true,
+            required: [true, 'User role is required'],
             enum: ['free-user', 'subscribed-user', 'admin-user'],
             default: 'free-user',
         },

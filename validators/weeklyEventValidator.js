@@ -1,4 +1,5 @@
 exports.weeklyEventValidator = (req, res, next) => {
+    req.check('type', 'Type is required').notEmpty()
     req.check('description', 'Description is required').notEmpty()
     req.check('title', 'Title is required').notEmpty()
     req.check('pointOfContact', 'Point of contact is required').notEmpty()

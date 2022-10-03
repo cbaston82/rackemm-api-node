@@ -6,6 +6,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const StripeAccount = require('../models/stripeAccountModel')
 const User = require('../models/userModel')
 const sendEmail = require('../utils/email')
+const catchAsync = require('../utils/catchAsync')
+const AppError = require('../utils/appError')
 
 const toId = mongoose.Types.ObjectId
 
@@ -32,56 +34,56 @@ function sendToken(user, res, email) {
     })
 }
 
-exports.loginUser = async (req, res, next) => {
-    try {
-        const { email, password } = req.body
+exports.loginUser = catchAsync(async (req, res, next) => {
+    const { email, password } = req.body
 
-        if (!email || !password) {
-            res.status(401).json({ error: 'Invalid login credentials' })
-        }
-
-        const user = await User.findOne({ email }).select('+password')
-
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid login credentials' })
-        }
-
-        const match = await bcrypt.compare(password, user.password)
-
-        if (!match) {
-            return res.status(401).json({ error: 'Invalid login credentials' })
-        }
-
-        return sendToken(user, res, email)
-    } catch (error) {
-        res.status(400).json({ error: 'Something went wrong' })
+    if (!email || !password) {
+        return next(new AppError('Invalid login credentials', 404))
     }
-}
 
-exports.signUp = async (req, res, next) => {
-    try {
-        const user = await User.create({
-            email: req.body.email,
-            fullName: req.body.fullName,
-            password: req.body.password,
-            passwordConfirm: req.body.passwordConfirm,
-        })
+    const user = await User.findOne({ email }).select('+password')
 
-        const customer = await stripe.customers.create({ email: req.body.email })
-
-        await StripeAccount.create({
-            user: toId(user._id),
-            user_email: req.body.email,
-            customerId: customer.id,
-        })
-
-        return sendToken(user, res, req.body.email)
-    } catch (error) {
-        return res.status(400).json({ error: error.message })
+    if (!user) {
+        return next(new AppError('Invalid login credentials', 404))
     }
-}
 
-exports.forgotPassword = async (req, res, next) => {
+    const match = await bcrypt.compare(password, user.password)
+
+    if (!match) {
+        return next(new AppError('Invalid login credentials', 404))
+    }
+
+    return sendToken(user, res, email)
+})
+
+exports.signUp = catchAsync(async (req, res, next) => {
+    const user = await User.create({
+        email: req.body.email,
+        fullName: req.body.fullName,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordConfirm,
+    })
+
+    const customer = await stripe.customers.create({ email: req.body.email })
+
+    if (!customer) {
+        return next(new AppError('Something went wrong!', 404))
+    }
+
+    const stripeCustomer = await StripeAccount.create({
+        user: toId(user._id),
+        user_email: req.body.email,
+        customerId: customer.id,
+    })
+
+    if (!stripeCustomer) {
+        return next(new AppError('Something went wrong!', 404))
+    }
+
+    return sendToken(user, res, req.body.email)
+})
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
     let user
 
     try {
@@ -115,7 +117,7 @@ exports.forgotPassword = async (req, res, next) => {
 
         res.status(400).json({ error: 'No user found with that email' })
     }
-}
+})
 
 exports.resetPassword = async (req, res, next) => {
     try {

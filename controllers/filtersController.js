@@ -1,55 +1,32 @@
 const mongoose = require('mongoose')
 const Filter = require('../models/filterModel')
+const catchAsync = require('../utils/catchAsync')
 
 const toId = mongoose.Types.ObjectId
 
-exports.createFilter = async (req, res) => {
-    try {
-        const user = toId(req.user._id)
-        const filter = await Filter.create({
-            ...req.body,
-            user,
-        })
-        res.status(200).json(filter)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
+exports.createFilter = catchAsync(async (req, res) => {
+    const filter = await Filter.create({
+        ...req.body,
+        user: toId(req.user._id),
+    })
 
-exports.getAllFilters = async (req, res) => {
-    try {
-        const user = toId(req.user._id)
-        const filters = await Filter.find({ user })
-        res.status(200).json(filters)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
+    res.status(200).json({ status: 'success', data: filter })
+})
 
-exports.getAFilter = async (req, res) => {
-    const user = toId(req.user._id)
-    const { id } = req.params
+exports.getAllFilters = catchAsync(async (req, res) => {
+    const filters = await Filter.find({ user: toId(req.user._id) })
 
-    try {
-        const filter = await Filter.findOne({ id: id, user })
-        res.status(200).json(filter)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
+    res.status(200).json({ status: 'success', data: filters })
+})
 
-exports.deleteAFilter = async (req, res) => {
-    const user = toId(req.user._id)
-    const { id } = req.params
+exports.getAFilter = catchAsync(async (req, res) => {
+    const filter = await Filter.findOne({ id: req.params.id, user: toId(req.user._id) })
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No such filer' })
-    }
+    res.status(200).json({ status: 'success', data: filter })
+})
 
-    try {
-        const filter = await Filter.findOneAndDelete({ _id: id, user })
-        res.status(200).json(filter)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
+exports.deleteAFilter = catchAsync(async (req, res) => {
+    const filter = await Filter.findOneAndDelete({ _id: req.params.id, user: toId(req.user._id) })
+
+    res.status(200).json({ status: 'success', data: filter })
+})
