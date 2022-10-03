@@ -1,6 +1,8 @@
 const crypto = require('crypto')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
+const validator = require('validator')
+
 const { millisecondsToSeconds } = require('date-fns')
 
 const userSchema = new mongoose.Schema(
@@ -10,20 +12,22 @@ const userSchema = new mongoose.Schema(
             required: [true, 'Email is required'],
             unique: true,
             lowercase: true,
+            validate: [validator.isEmail, 'That is not a valid email'],
         },
         fullName: {
             type: String,
             required: [true, 'Full name is required'],
         },
+        photo: String,
         password: {
             type: String,
             required: [true, 'Password is required'],
+            minLength: 6,
             select: false,
         },
-        photo: String,
         passwordConfirm: {
             type: String,
-            required: true,
+            required: [true, 'Please confirm your password'],
             select: false,
         },
         role: {

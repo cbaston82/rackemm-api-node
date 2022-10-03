@@ -3,13 +3,11 @@ const express = require('express')
 const router = express.Router()
 const authController = require('../middleware/authMiddleware')
 const userController = require('../controllers/userController')
-const { updateMeValidator } = require('../validators/updateMeValidator')
 
 router.patch(
     '/update-me/',
     authController.requireSignin,
     authController.restrictTo('free-user', 'subscribed-user', 'admin-user'),
-    updateMeValidator,
     userController.updateMe,
 )
 

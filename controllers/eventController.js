@@ -25,6 +25,10 @@ exports.getEventPublic = catchAsync(async (req, res, next) => {
 
     const event = await Event.findById(id)
 
+    if (!event) {
+        return next(new AppError('No event found', 404))
+    }
+
     res.status(200).json({ status: 'success', data: event })
 })
 
@@ -59,7 +63,7 @@ exports.deleteEvent = catchAsync(async (req, res, next) => {
         return next(new AppError('No event found with that ID', 404))
     }
 
-    res.status(204).json({ status: 'success', data: null })
+    res.status(200).json({ status: 'success', data: event })
 })
 
 exports.createEvent = catchAsync(async (req, res, next) => {
