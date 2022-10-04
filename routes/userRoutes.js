@@ -5,56 +5,22 @@ const authMiddleware = require('../middleware/authMiddleware')
 const userController = require('../controllers/userController')
 
 // AUTH ROUTES
-router.patch(
-    '/updateMe',
+router.use(
     authMiddleware.requireSignin,
     authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
-    userController.updateMe,
 )
+router.patch('/updateMe', userController.updateMe)
+router.delete('/deleteMe', userController.deleteMe)
+router.get('/me', userController.getMe)
 
-router.delete(
-    '/deleteMe',
-    authMiddleware.requireSignin,
-    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
-    userController.deleteMe,
-)
+router.use(authMiddleware.restrictTo('administrator'))
 
-router.get(
-    '/me',
-    authMiddleware.requireSignin,
-    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
-    userController.getMe,
-)
-
-router
-    .route('/')
-    .get(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('administrator'),
-        userController.getUsers,
-    )
-    .post(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('administrator'),
-        userController.createUser,
-    )
-
+// ADMINISTRATORS ONLY
+router.route('/').get(userController.getUsers).post(userController.createUser)
 router
     .route('/:id')
-    .delete(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('administrator'),
-        userController.deleteUser,
-    )
-    .get(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('administrator'),
-        userController.getUser,
-    )
-    .patch(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('administrator'),
-        userController.updateUser,
-    )
+    .delete(userController.deleteUser)
+    .get(userController.getUser)
+    .patch(userController.updateUser)
 
 module.exports = router

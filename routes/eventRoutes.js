@@ -17,45 +17,15 @@ router.get('/public', eventController.getEventsPublic)
 router.get('/public/:id', eventController.getEventPublic)
 
 // AUTH ROUTES
-router.post(
-    '/',
-    authMiddleware.requireSignin,
-    authMiddleware.restrictTo('subscriber', 'administrator'),
-    eventController.createEvent,
-)
+router.use(authMiddleware.requireSignin, authMiddleware.restrictTo('subscriber', 'administrator'))
 
-router.get(
-    '/weekly-events',
-    authMiddleware.requireSignin,
-    authMiddleware.restrictTo('subscriber', 'administrator'),
-    eventsMiddleware.getWeekly,
-    eventController.getEvents,
-)
-
-router.get(
-    '/yearly-events',
-    authMiddleware.requireSignin,
-    authMiddleware.restrictTo('subscriber', 'administrator'),
-    eventsMiddleware.getYearly,
-    eventController.getEvents,
-)
-
+router.post('/', eventController.createEvent)
+router.get('/weekly-events', eventsMiddleware.getWeekly, eventController.getEvents)
+router.get('/yearly-events', eventsMiddleware.getYearly, eventController.getEvents)
 router
     .route('/:id')
-    .patch(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('subscriber', 'administrator'),
-        eventController.updateEvent,
-    )
-    .delete(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('subscriber', 'administrator'),
-        eventController.deleteEvent,
-    )
-    .get(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('subscriber', 'administrator'),
-        eventController.getEvent,
-    )
+    .patch(eventController.updateEvent)
+    .delete(eventController.deleteEvent)
+    .get(eventController.getEvent)
 
 module.exports = router

@@ -11,11 +11,8 @@ router.post('/forgot-password', authController.forgotPassword)
 router.patch('/reset-password/:token', authController.resetPassword)
 
 // AUTH ROUTES
-router.patch(
-    '/update-password/',
-    authMiddleware.requireSignin,
-    authMiddleware.restrictTo('subscriber', 'administrator'),
-    authController.updatePassword,
-)
+router.use(authMiddleware.requireSignin, authMiddleware.restrictTo('subscriber', 'administrator'))
+
+router.patch('/update-password/', authController.updatePassword)
 
 module.exports = router

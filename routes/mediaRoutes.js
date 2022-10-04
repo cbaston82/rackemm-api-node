@@ -5,24 +5,8 @@ const router = express.Router()
 const authController = require('../middleware/authMiddleware')
 
 // AUTH ROUTES
-router
-    .route('/')
-    .post(
-        authController.requireSignin,
-        authController.restrictTo('subscriber', 'administrator'),
-        mediaController.uploadMedia,
-    )
-    .get(
-        authController.requireSignin,
-        authController.restrictTo('subscriber', 'administrator'),
-        mediaController.getUserMedia,
-    )
-
-router.delete(
-    '/:id',
-    authController.requireSignin,
-    authController.restrictTo('subscriber', 'administrator'),
-    mediaController.deleteMedia,
-)
+router.use(authController.requireSignin, authController.restrictTo('subscriber', 'administrator'))
+router.route('/').post(mediaController.uploadMedia).get(mediaController.getUserMedia)
+router.delete('/:id', mediaController.deleteMedia)
 
 module.exports = router

@@ -8,25 +8,11 @@ const router = express.Router({ mergeParams: true })
 router.route('/public').get(reviewController.getAllReviews)
 
 // AUTH ROUTES
-router
-    .route('/')
-    .post(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
-        reviewController.createReview,
-    )
-
-router
-    .route('/:id')
-    .delete(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
-        reviewController.deleteReview,
-    )
-    .patch(
-        authMiddleware.requireSignin,
-        authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
-        reviewController.updateReview,
-    )
+router.use(
+    authMiddleware.requireSignin,
+    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
+)
+router.route('/').post(reviewController.createReview)
+router.route('/:id').delete(reviewController.deleteReview).patch(reviewController.updateReview)
 
 module.exports = router
