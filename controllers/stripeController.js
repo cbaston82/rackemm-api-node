@@ -105,7 +105,7 @@ exports.webhook = async (req, res) => {
 
             await User.findOneAndUpdate(
                 {
-                    user: stripeCustomer.user,
+                    _id: stripeCustomer.user.toString(),
                 },
                 { role: 'subscriber' },
             )

@@ -1,0 +1,56 @@
+[
+  {
+    "_id": "633c9368b49a36b3a3b19181",
+    "email": "adminuser@gmail.com",
+    "fullName": "Admin User",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "subscriber",
+    "active": true
+  },
+  {
+    "_id": "633c93c2b49a36b3a3b19189",
+    "email": "subscribeduser@gmail.com",
+    "fullName": "Subscribed User",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "subscriber",
+    "active": true
+  },
+  {
+    "_id": "633ca08083fe450aaec4bc89",
+    "email": "freeuser@gmail.com",
+    "fullName": "Free User",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "user",
+    "active": true
+  },
+  {
+    "_id": "633ca0cc83fe450aaec4bc97",
+    "email": "inactiveuser@gmail.com",
+    "fullName": "Inactive User",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "user",
+    "active": false
+  },
+  {
+    "_oid": "633ca1cd83fe450aaec4bca6",
+    "email": "userone@gmail.com",
+    "fullName": "user one",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "user",
+    "active": true
+  },
+  {
+    "_id": "633cb15db51ff6688de21fb6",
+    "email": "user2@gmail.com",
+    "fullName": "User Two",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "subscriber",
+    "active": true
+  }
+]

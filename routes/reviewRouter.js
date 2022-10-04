@@ -5,13 +5,10 @@ const reviewController = require('../controllers/reviewController')
 const router = express.Router({ mergeParams: true })
 
 // PUBLIC ROUTES
-router.route('/public').get(reviewController.getAllReviews)
+router.route('/').get(reviewController.getAllReviews)
 
 // AUTH ROUTES
-router.use(
-    authMiddleware.requireSignin,
-    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
-)
+router.use(authMiddleware.requireSignin, authMiddleware.restrictTo('user', 'subscriber'))
 router.route('/').post(reviewController.createReview)
 router.route('/:id').delete(reviewController.deleteReview).patch(reviewController.updateReview)
 

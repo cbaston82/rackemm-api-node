@@ -17,7 +17,7 @@ exports.getEventsPublic = catchAsync(async (req, res, next) => {
 
     const events = await features.query
 
-    res.status(200).json({ status: 'success', data: events })
+    res.status(200).json({ status: 'success', results: events.length, data: events })
 })
 
 exports.getEventPublic = catchAsync(async (req, res, next) => {

@@ -7,7 +7,7 @@ const userController = require('../controllers/userController')
 // AUTH ROUTES
 router.use(
     authMiddleware.requireSignin,
-    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
+    authMiddleware.restrictTo('user', 'subscriber', 'administrator'),
 )
 router.patch('/updateMe', userController.updateMe)
 router.delete('/deleteMe', userController.deleteMe)

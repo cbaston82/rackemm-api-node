@@ -39,8 +39,8 @@ const userSchema = new mongoose.Schema(
         role: {
             type: String,
             required: [true, 'User role is required'],
-            enum: ['free', 'subscriber', 'administrator'],
-            default: 'free',
+            enum: ['user', 'subscriber', 'administrator'],
+            default: 'user',
         },
         passwordChangedAt: Number,
         passwordResetToken: {

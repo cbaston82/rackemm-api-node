@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "633cb1e0b51ff6688de21fc8",
+    "url": "/weekly-events?buyIn=null&city=null&day=null&game=null&filter=9-ball",
+    "description": "9-Ball only filter",
+    "type": "weekly",
+    "user": "633cb15db51ff6688de21fb6"
+  },
+  {
+    "_id": "633cb1f5b51ff6688de21fce",
+    "url": "/weekly-events?buyIn=99&city=all&day=Friday&game=all&filter=",
+    "description": "Friday Nights",
+    "type": "weekly",
+    "user": "633cb15db51ff6688de21fb6"
+  },
+  {
+    "_id": "633cb210b51ff6688de21fd7",
+    "url": "/yearly-events?buyIn=50&city=null&game=null&filter=null",
+    "description": "Under $50",
+    "type": "yearly",
+    "user": "633cb15db51ff6688de21fb6"
+  }
+]
