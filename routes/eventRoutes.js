@@ -13,20 +13,21 @@ router.use('/:eventId/reviews', reviewRouter)
 router.get('/get-stats', eventsMiddleware.getWeekly, eventController.getEventStats)
 router.get('/weekly-events/public', eventsMiddleware.getWeekly, eventController.getEventsPublic)
 router.get('/yearly-events/public', eventsMiddleware.getYearly, eventController.getEventsPublic)
+router.get('/public', eventController.getEventsPublic)
 router.get('/public/:id', eventController.getEventPublic)
 
 // AUTH WEEKLY
 router.post(
     '/',
     authMiddleware.requireSignin,
-    authMiddleware.restrictTo('subscribed-user', 'admin-user'),
+    authMiddleware.restrictTo('subscriber', 'administrator'),
     eventController.createEvent,
 )
 
 router.get(
     '/weekly-events',
     authMiddleware.requireSignin,
-    authMiddleware.restrictTo('subscribed-user', 'admin-user'),
+    authMiddleware.restrictTo('subscriber', 'administrator'),
     eventsMiddleware.getWeekly,
     eventController.getEvents,
 )
@@ -34,7 +35,7 @@ router.get(
 router.get(
     '/yearly-events',
     authMiddleware.requireSignin,
-    authMiddleware.restrictTo('subscribed-user', 'admin-user'),
+    authMiddleware.restrictTo('subscriber', 'administrator'),
     eventsMiddleware.getYearly,
     eventController.getEvents,
 )
@@ -43,17 +44,17 @@ router
     .route('/:id')
     .patch(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.restrictTo('subscriber', 'administrator'),
         eventController.updateEvent,
     )
     .delete(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.restrictTo('subscriber', 'administrator'),
         eventController.deleteEvent,
     )
     .get(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.restrictTo('subscriber', 'administrator'),
         eventController.getEvent,
     )
 

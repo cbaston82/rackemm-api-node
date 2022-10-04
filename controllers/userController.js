@@ -45,13 +45,31 @@ exports.createUser = catchAsync(async (req, res, next) => {
     res.status(200).json({ status: 'success', data: user })
 })
 
-exports.updateUser = async (req, res) => {
-    res.status(200).json('update user')
-}
+exports.updateUser = catchAsync(async (req, res, next) => {
+    const user = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+            ...req.body,
+        },
+        { new: true },
+    )
 
-exports.getUser = async (req, res) => {
-    res.status(200).json('get user')
-}
+    if (!user) {
+        return next(new AppError('Could not update user', 400))
+    }
+
+    res.status(200).json({ status: 'success', data: user })
+})
+
+exports.getUser = catchAsync(async (req, res, next) => {
+    const user = await User.findById(req.params.id)
+
+    if (!user) {
+        return next(new AppError('Could not get user', 400))
+    }
+
+    res.status(200).json({ status: 'success', data: user })
+})
 
 exports.updateMe = catchAsync(async (req, res, next) => {
     if (req.body.password || req.body.passwordConfirm) {

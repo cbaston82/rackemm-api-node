@@ -8,19 +8,19 @@ router
     .route('/')
     .post(
         authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authController.restrictTo('subscriber', 'administrator'),
         mediaController.uploadMedia,
     )
     .get(
         authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authController.restrictTo('subscriber', 'administrator'),
         mediaController.getUserMedia,
     )
 
 router.delete(
     '/:id',
     authController.requireSignin,
-    authController.restrictTo('subscribed-user', 'admin-user'),
+    authController.restrictTo('subscriber', 'administrator'),
     mediaController.deleteMedia,
 )
 

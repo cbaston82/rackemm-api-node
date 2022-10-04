@@ -47,7 +47,7 @@ exports.deleteMedia = catchAsync(async (req, res, next) => {
         return next(new AppError('Something went wrong'))
     }
 
-    const response = await cloudinary.uploader.destroy(`rackemm_images/${publicId}`)
+    await cloudinary.uploader.destroy(`rackemm_images/${publicId}`)
 
-    res.status(200).json({ status: 'success', data: response })
+    res.status(200).json({ status: 'success', data: media })
 })

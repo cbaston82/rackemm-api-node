@@ -9,7 +9,7 @@ router
     .get(reviewController.getAllReviews)
     .post(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+        authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
         reviewController.createReview,
     )
 
@@ -17,12 +17,12 @@ router
     .route('/:id')
     .delete(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+        authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
         reviewController.deleteReview,
     )
     .patch(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+        authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
         reviewController.updateReview,
     )
 

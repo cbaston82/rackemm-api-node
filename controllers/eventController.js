@@ -73,7 +73,7 @@ exports.createEvent = catchAsync(async (req, res, next) => {
 
 exports.updateEvent = catchAsync(async (req, res, next) => {
     const event = await Event.findOneAndUpdate(
-        { _id: req.params.id, user: req.user._id },
+        { _id: req.params.id, user: toId(req.user._id) },
         {
             ...req.body,
         },

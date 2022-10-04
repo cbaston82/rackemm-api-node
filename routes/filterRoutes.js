@@ -8,12 +8,12 @@ router
     .route('/')
     .post(
         authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authController.restrictTo('subscriber', 'administrator'),
         filterController.createFilter,
     )
     .get(
         authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authController.restrictTo('subscriber', 'administrator'),
         filterController.getAllFilters,
     )
 
@@ -21,13 +21,18 @@ router
     .route('/:id')
     .get(
         authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authController.restrictTo('subscriber', 'administrator'),
         filterController.getAFilter,
     )
     .delete(
         authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authController.restrictTo('subscriber', 'administrator'),
         filterController.deleteAFilter,
+    )
+    .patch(
+        authController.requireSignin,
+        authController.restrictTo('subscriber', 'administrator'),
+        filterController.updateFilter,
     )
 
 module.exports = router

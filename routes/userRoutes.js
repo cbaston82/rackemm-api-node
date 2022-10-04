@@ -5,23 +5,23 @@ const authMiddleware = require('../middleware/authMiddleware')
 const userController = require('../controllers/userController')
 
 router.patch(
-    '/update-me',
+    '/updateMe',
     authMiddleware.requireSignin,
-    authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
     userController.updateMe,
 )
 
 router.delete(
-    '/delete-me',
+    '/deleteMe',
     authMiddleware.requireSignin,
-    authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
     userController.deleteMe,
 )
 
 router.get(
     '/me',
     authMiddleware.requireSignin,
-    authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+    authMiddleware.restrictTo('free', 'subscriber', 'administrator'),
     userController.getMe,
 )
 
@@ -29,12 +29,12 @@ router
     .route('/')
     .get(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('admin-user'),
+        authMiddleware.restrictTo('administrator'),
         userController.getUsers,
     )
     .post(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('admin-user'),
+        authMiddleware.restrictTo('administrator'),
         userController.createUser,
     )
 
@@ -42,17 +42,17 @@ router
     .route('/:id')
     .delete(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('admin-user'),
+        authMiddleware.restrictTo('administrator'),
         userController.deleteUser,
     )
     .get(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('admin-user'),
+        authMiddleware.restrictTo('administrator'),
         userController.getUser,
     )
     .patch(
         authMiddleware.requireSignin,
-        authMiddleware.restrictTo('admin-user'),
+        authMiddleware.restrictTo('administrator'),
         userController.updateUser,
     )
 
