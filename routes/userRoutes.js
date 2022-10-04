@@ -1,51 +1,58 @@
 const express = require('express')
 
 const router = express.Router()
-const authController = require('../middleware/authMiddleware')
+const authMiddleware = require('../middleware/authMiddleware')
 const userController = require('../controllers/userController')
 
 router.patch(
-    '/update-me/',
-    authController.requireSignin,
-    authController.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+    '/update-me',
+    authMiddleware.requireSignin,
+    authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
     userController.updateMe,
 )
 
 router.delete(
-    '/delete-me/',
-    authController.requireSignin,
-    authController.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+    '/delete-me',
+    authMiddleware.requireSignin,
+    authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
     userController.deleteMe,
+)
+
+router.get(
+    '/me',
+    authMiddleware.requireSignin,
+    authMiddleware.restrictTo('free-user', 'subscribed-user', 'admin-user'),
+    userController.getMe,
 )
 
 router
     .route('/')
     .get(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.requireSignin,
+        authMiddleware.restrictTo('admin-user'),
         userController.getUsers,
     )
     .post(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.requireSignin,
+        authMiddleware.restrictTo('admin-user'),
         userController.createUser,
     )
 
 router
     .route('/:id')
     .delete(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.requireSignin,
+        authMiddleware.restrictTo('admin-user'),
         userController.deleteUser,
     )
     .get(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.requireSignin,
+        authMiddleware.restrictTo('admin-user'),
         userController.getUser,
     )
     .patch(
-        authController.requireSignin,
-        authController.restrictTo('subscribed-user', 'admin-user'),
+        authMiddleware.requireSignin,
+        authMiddleware.restrictTo('admin-user'),
         userController.updateUser,
     )
 

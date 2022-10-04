@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please confirm your password'],
             select: false,
+            validate: {
+                validator: function (el) {
+                    return el === this.password
+                },
+                message: 'Passwords must match',
+            },
         },
         role: {
             type: String,
@@ -37,8 +43,14 @@ const userSchema = new mongoose.Schema(
             default: 'free-user',
         },
         passwordChangedAt: Number,
-        passwordResetToken: String,
-        passwordResetExpires: Number,
+        passwordResetToken: {
+            type: String,
+            select: false,
+        },
+        passwordResetExpires: {
+            type: String,
+            select: false,
+        },
         active: {
             type: Boolean,
             default: true,
@@ -47,6 +59,8 @@ const userSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
     },
 )
 
@@ -61,6 +75,7 @@ userSchema.pre('save', async function (next) {
 
 userSchema.pre('save', function (next) {
     if (!this.isModified('password') || this.isNew) return next()
+
     this.passwordChangedAt = millisecondsToSeconds(Math.round(new Date().getTime())) - 1000
 
     next()

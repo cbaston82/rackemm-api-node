@@ -21,9 +21,7 @@ exports.getEventsPublic = catchAsync(async (req, res, next) => {
 })
 
 exports.getEventPublic = catchAsync(async (req, res, next) => {
-    const { id } = req.params
-
-    const event = await Event.findById(id)
+    const event = await Event.findOne({ _id: toId(req.params.id) }).populate('reviews')
 
     if (!event) {
         return next(new AppError('No event found', 404))

@@ -47,6 +47,7 @@ const stripeAccountSchema = new Schema(
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
+            required: [true, 'Must belong to a user'],
         },
         user_email: {
             type: String,
@@ -55,6 +56,8 @@ const stripeAccountSchema = new Schema(
     },
     {
         timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
     },
 )
 

@@ -68,6 +68,7 @@ const eventSchema = new Schema(
         day: {
             type: String,
             default: '',
+            require: true,
         },
         startTime: {
             type: String,
@@ -90,6 +91,7 @@ const eventSchema = new Schema(
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
+            required: [true, 'Must belong to a user'],
         },
     },
     {
@@ -99,8 +101,15 @@ const eventSchema = new Schema(
     },
 )
 
+eventSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'event',
+    localField: '_id',
+})
+
 eventSchema.virtual('fullAddress').get(function () {
     return `${this.address}, ${this.city}, ${this.state} ${this.zipCode}`
 })
 
-module.exports = mongoose.model('Event', eventSchema)
+const Event = mongoose.model('Event', eventSchema)
+module.exports = Event

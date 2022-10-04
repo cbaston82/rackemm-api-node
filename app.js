@@ -15,6 +15,7 @@ const eventRouter = require('./routes/eventRoutes')
 const stripeRouter = require('./routes/stripeRoutes')
 const mediaRouter = require('./routes/mediaRoutes')
 const authRouter = require('./routes/authRoutes')
+const reviewRouter = require('./routes/reviewRouter')
 const stripeController = require('./controllers/stripeController')
 
 const app = express()
@@ -52,17 +53,27 @@ app.use(xss())
 // PREVENT PARAMETER POLLUTION
 app.use(
     hpp({
-        whitelist: ['game'],
+        whitelist: [
+            'game',
+            'type',
+            'pointOfContact',
+            'buyIn',
+            'venue',
+            'city',
+            'day',
+            'ratingSystem',
+        ],
     }),
 )
 
 // ROUTES
 app.use('/api/v1/events', eventRouter)
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/user', userRouter)
+app.use('/api/v1/users', userRouter)
 app.use('/api/v1/filters', filterRouter)
 app.use('/api/v1/stripe', stripeRouter)
 app.use('/api/v1/media', mediaRouter)
+app.use('/api/v1/reviews', reviewRouter)
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl}`, 404))

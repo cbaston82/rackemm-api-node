@@ -9,7 +9,7 @@ process.on('uncaughtException', (err) => {
 
 const app = require('./app')
 
-mongoose.connect(process.env.MONGO_URI).then(() => {
+mongoose.connect(process.env.MONGO_URI_LOCAL).then(() => {
     console.log('connect to Mongo Database')
 })
 

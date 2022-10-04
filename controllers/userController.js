@@ -1,19 +1,49 @@
 const mongoose = require('mongoose')
+const catchAsync = require('../utils/catchAsync')
 const User = require('../models/userModel')
+const AppError = require('../utils/appError')
 
 const toId = mongoose.Types.ObjectId
 
-exports.getUsers = async (req, res) => {
-    res.status(200).json('all users')
+const filterObj = (obj, ...allowedFields) => {
+    const newObj = {}
+
+    Object.keys(obj).forEach((el) => {
+        if (allowedFields.includes(el)) newObj[el] = obj[el]
+    })
+
+    return newObj
 }
 
-exports.deleteUser = async (req, res) => {
-    res.status(200).json('delete user')
-}
+exports.getUsers = catchAsync(async (req, res, next) => {
+    const users = await User.find()
 
-exports.createUser = async (req, res) => {
-    res.status(200).json('create user')
-}
+    if (!users) {
+        return next(new AppError('Could not get users', 400))
+    }
+
+    res.status(200).json({ status: 'success', data: users })
+})
+
+exports.deleteUser = catchAsync(async (req, res, next) => {
+    const user = await User.findByIdAndUpdate(toId(req.params.id), { active: false })
+
+    if (!user) {
+        return next(new AppError('Could not delete account', 400))
+    }
+
+    res.status(200).json({ status: 'success', message: 'Account was deleted' })
+})
+
+exports.createUser = catchAsync(async (req, res, next) => {
+    const user = await User.create(req.body)
+
+    if (!user) {
+        return next(new AppError('Could not create user.', 400))
+    }
+
+    res.status(200).json({ status: 'success', data: user })
+})
 
 exports.updateUser = async (req, res) => {
     res.status(200).json('update user')
@@ -23,39 +53,41 @@ exports.getUser = async (req, res) => {
     res.status(200).json('get user')
 }
 
-exports.updateMe = async (req, res, next) => {
+exports.updateMe = catchAsync(async (req, res, next) => {
     if (req.body.password || req.body.passwordConfirm) {
-        return res.status(400).json({ error: 'Cannot update password here.' })
+        return next(new AppError('Cannot update password here', 404))
     }
 
-    try {
-        const user = await User.findByIdAndUpdate(
-            toId(req.user._id),
-            {
-                email: req.user.email,
-                fullName: req.user.fullName,
-            },
-            {
-                new: true,
-            },
-        )
+    const filteredBody = filterObj(req.body, 'name', 'email')
 
-        if (!user) {
-            return res.status(400).json({ error: 'User information not found' })
-        }
+    const user = await User.findByIdAndUpdate(toId(req.user._id), filteredBody, {
+        new: true,
+        runValidators: true,
+    })
 
-        return res.status(200).json(user)
-    } catch (error) {
-        res.status(400).json({ error: 'Could not update information.' })
+    if (!user) {
+        return next(new AppError('User not found', 404))
     }
-}
 
-exports.deleteMe = async (req, res, next) => {
-    try {
-        await User.findByIdAndUpdate(toId(req.user.id), { active: false })
+    return res.status(200).json({ status: 'success', data: user })
+})
 
-        res.status(204).json({ error: 'Account was deleted' })
-    } catch (error) {
-        res.status(400).json({ error: 'Problems deleting account' })
+exports.deleteMe = catchAsync(async (req, res, next) => {
+    const user = await User.findByIdAndUpdate(toId(req.user.id), { active: false })
+
+    if (!user) {
+        next(new AppError('Could not delete account', 400))
     }
-}
+
+    res.status(200).json({ status: 'success', message: 'Account was deleted' })
+})
+
+exports.getMe = catchAsync(async (req, res, next) => {
+    const user = await User.findById(toId(req.user._id))
+
+    if (!user) {
+        return next(new AppError('Could not get user information', 400))
+    }
+
+    res.status(200).json({ status: 'successful', data: user })
+})
