@@ -101,6 +101,11 @@ const eventSchema = new Schema(
     },
 )
 
+eventSchema.index({ buyIn: -1 })
+eventSchema.index({ game: -1 })
+eventSchema.index({ day: -1 })
+eventSchema.index({ city: -1 })
+
 eventSchema.virtual('reviews', {
     ref: 'Review',
     foreignField: 'event',
