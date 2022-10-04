@@ -4,9 +4,12 @@ const reviewController = require('../controllers/reviewController')
 
 const router = express.Router({ mergeParams: true })
 
+// PUBLIC ROUTES
+router.route('/public').get(reviewController.getAllReviews)
+
+// AUTH ROUTES
 router
     .route('/')
-    .get(reviewController.getAllReviews)
     .post(
         authMiddleware.requireSignin,
         authMiddleware.restrictTo('free', 'subscriber', 'administrator'),

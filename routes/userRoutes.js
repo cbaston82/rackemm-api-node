@@ -4,6 +4,7 @@ const router = express.Router()
 const authMiddleware = require('../middleware/authMiddleware')
 const userController = require('../controllers/userController')
 
+// AUTH ROUTES
 router.patch(
     '/updateMe',
     authMiddleware.requireSignin,

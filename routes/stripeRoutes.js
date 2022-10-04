@@ -4,6 +4,10 @@ const authController = require('../middleware/authMiddleware')
 
 const router = express.Router()
 
+// PUBLIC ROUTES
+router.post('/checkout-user', authController.requireSignin, stripeController.checkoutUser)
+
+// AUTH ROUTES
 router.post(
     '/create-portal-session',
     authController.requireSignin,
@@ -15,7 +19,5 @@ router.get(
     authController.requireSignin,
     stripeController.getUserStripeCustomer,
 )
-
-router.post('/checkout-user', authController.requireSignin, stripeController.checkoutUser)
 
 module.exports = router

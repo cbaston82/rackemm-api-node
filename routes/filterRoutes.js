@@ -4,6 +4,7 @@ const authController = require('../middleware/authMiddleware')
 
 const router = express.Router()
 
+// AUTH ROUTES
 router
     .route('/')
     .post(

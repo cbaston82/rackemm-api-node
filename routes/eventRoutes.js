@@ -9,14 +9,14 @@ const router = express.Router()
 // MOUNT ROUTER REVIEWS
 router.use('/:eventId/reviews', reviewRouter)
 
-// PUBLIC
+// PUBLIC ROUTES
 router.get('/get-stats', eventsMiddleware.getWeekly, eventController.getEventStats)
 router.get('/weekly-events/public', eventsMiddleware.getWeekly, eventController.getEventsPublic)
 router.get('/yearly-events/public', eventsMiddleware.getYearly, eventController.getEventsPublic)
 router.get('/public', eventController.getEventsPublic)
 router.get('/public/:id', eventController.getEventPublic)
 
-// AUTH WEEKLY
+// AUTH ROUTES
 router.post(
     '/',
     authMiddleware.requireSignin,

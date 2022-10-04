@@ -4,6 +4,7 @@ const mediaController = require('../controllers/mediaController')
 const router = express.Router()
 const authController = require('../middleware/authMiddleware')
 
+// AUTH ROUTES
 router
     .route('/')
     .post(
