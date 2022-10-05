@@ -1,48 +1,8 @@
 [
   {
-    "_id": "633c9368b49a36b3a3b19181",
-    "email": "adminuser@gmail.com",
-    "fullName": "Admin User",
-    "password": "password",
-    "passwordConfirm": "password",
-    "role": "subscriber",
-    "photo": "",
-    "active": true
-  },
-  {
-    "_id": "633c93c2b49a36b3a3b19189",
-    "email": "subscribeduser@gmail.com",
-    "fullName": "Subscribed User",
-    "password": "password",
-    "passwordConfirm": "password",
-    "role": "subscriber",
-    "photo": "",
-    "active": true
-  },
-  {
-    "_id": "633ca08083fe450aaec4bc89",
-    "email": "freeuser@gmail.com",
-    "fullName": "Free User",
-    "password": "password",
-    "passwordConfirm": "password",
-    "role": "user",
-    "photo": "",
-    "active": true
-  },
-  {
-    "_id": "633ca0cc83fe450aaec4bc97",
-    "email": "inactiveuser@gmail.com",
-    "fullName": "Inactive User",
-    "password": "password",
-    "passwordConfirm": "password",
-    "role": "user",
-    "photo": "",
-    "active": false
-  },
-  {
     "_id": "633ca1cd83fe450aaec4bca6",
-    "email": "userone@gmail.com",
-    "fullName": "user one",
+    "email": "freeuser2@gmail.com",
+    "fullName": "Free User2",
     "password": "password",
     "passwordConfirm": "password",
     "role": "user",
@@ -51,12 +11,52 @@
   },
   {
     "_id": "633cb15db51ff6688de21fb6",
-    "email": "user2@gmail.com",
-    "fullName": "User Two",
+    "email": "level1user@gmail.com",
+    "fullName": "Level1 User",
     "password": "password",
     "passwordConfirm": "password",
     "role": "subscriber",
     "photo": "",
     "active": true
+  },
+  {
+    "_id": "633c9368b49a36b3a3b19181",
+    "email": "adminuser@gmail.com",
+    "fullName": "Admin User",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "administrator",
+    "photo": "",
+    "active": true
+  },
+  {
+    "_id": "633c93c2b49a36b3a3b19189",
+    "email": "level2user@gmail.com",
+    "fullName": "Level2 User",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "subscriber",
+    "photo": "",
+    "active": true
+  },
+  {
+    "_id": "633ca08083fe450aaec4bc89",
+    "email": "freeuser1@gmail.com",
+    "fullName": "Free User1",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "user",
+    "photo": "",
+    "active": true
+  },
+  {
+    "_id": "633ca0cc83fe450aaec4bc97",
+    "email": "level1userinactive@gmail.com",
+    "fullName": "Level1 User Inactive",
+    "password": "password",
+    "passwordConfirm": "password",
+    "role": "user",
+    "photo": "",
+    "active": false
   }
 ]
