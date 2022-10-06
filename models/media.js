@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const unixTimestamp = require('mongoose-unix-timestamp')
 
 const { Schema } = mongoose
 
@@ -23,10 +24,11 @@ const mediaSchema = new Schema(
         },
     },
     {
-        timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     },
 )
+
+mediaSchema.plugin(unixTimestamp)
 
 module.exports = mongoose.model('Media', mediaSchema)

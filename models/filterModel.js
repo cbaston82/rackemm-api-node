@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const unixTimestamp = require('mongoose-unix-timestamp')
 
 const filterSchema = new mongoose.Schema(
     {
@@ -21,10 +22,11 @@ const filterSchema = new mongoose.Schema(
         },
     },
     {
-        timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     },
 )
+
+filterSchema.plugin(unixTimestamp)
 
 module.exports = mongoose.model('Filter', filterSchema)

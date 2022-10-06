@@ -31,6 +31,7 @@ function sendToken(user, res, email) {
         status: 'success',
         data: {
             fullName: user.fullName,
+            id: user._id,
             email,
             token,
         },

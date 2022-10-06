@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const unixTimestamp = require('mongoose-unix-timestamp')
 
 const { Schema } = mongoose
 
@@ -55,10 +56,11 @@ const stripeAccountSchema = new Schema(
         },
     },
     {
-        timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     },
 )
+
+stripeAccountSchema.plugin(unixTimestamp)
 
 module.exports = mongoose.model('StripeAccount', stripeAccountSchema)

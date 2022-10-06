@@ -2,6 +2,7 @@ const crypto = require('crypto')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
+const unixTimestamp = require('mongoose-unix-timestamp')
 
 const { millisecondsToSeconds } = require('date-fns')
 
@@ -61,11 +62,12 @@ const userSchema = new mongoose.Schema(
         },
     },
     {
-        timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     },
 )
+
+userSchema.plugin(unixTimestamp)
 
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next()

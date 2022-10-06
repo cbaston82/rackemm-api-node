@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const unixTimestamp = require('mongoose-unix-timestamp')
 
 const { Schema } = mongoose
 
@@ -106,11 +107,12 @@ const eventSchema = new Schema(
         },
     },
     {
-        timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     },
 )
+
+eventSchema.plugin(unixTimestamp)
 
 eventSchema.index({ buyIn: -1 })
 eventSchema.index({ game: -1 })

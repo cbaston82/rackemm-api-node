@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const unixTimestamp = require('mongoose-unix-timestamp')
 const Event = require('./eventModel')
 
 const reviewSchema = new mongoose.Schema(
@@ -23,11 +24,12 @@ const reviewSchema = new mongoose.Schema(
         },
     },
     {
-        timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     },
 )
+
+reviewSchema.plugin(unixTimestamp)
 
 reviewSchema.index({ event: 1, user: 1 }, { unique: true })
 
