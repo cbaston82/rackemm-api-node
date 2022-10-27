@@ -4,7 +4,10 @@ const Event = require('./eventModel')
 
 const reviewSchema = new mongoose.Schema(
     {
-        review: String,
+        review: {
+            type: String,
+            required: [true, 'Please provide your feedback.'],
+        },
         rating: {
             type: Number,
             min: 1,

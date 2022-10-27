@@ -22,7 +22,12 @@ exports.createReview = catchAsync(async (req, res, next) => {
     if (!req.body.event) req.body.event = req.params.eventId
     if (!req.body.user) req.body.user = toId(req.user.id)
 
-    const review = await Review.create({ user: toId(req.body._id), ...req.body })
+    const review = await Review.create({ user: toId(req.body._id), ...req.body }).then((t) =>
+        t.populate({
+            path: 'user',
+            select: 'fullName photo',
+        }),
+    )
 
     if (!review) {
         return next(new AppError('Could not save review', 400))
