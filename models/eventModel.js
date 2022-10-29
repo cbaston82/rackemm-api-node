@@ -84,11 +84,6 @@ const eventSchema = new Schema(
             required: [true, 'Status is required'],
             enum: ['active', 'inactive'],
         },
-        bracket: {
-            type: String,
-            trim: true,
-            default: '',
-        },
         ratingsAverage: {
             type: Number,
             default: 4.5,
@@ -119,6 +114,11 @@ eventSchema.index({ game: -1 })
 eventSchema.index({ day: -1 })
 eventSchema.index({ city: -1 })
 
+eventSchema.virtual('brackets', {
+    ref: 'Bracket',
+    foreignField: 'event',
+    localField: '_id',
+})
 eventSchema.virtual('reviews', {
     ref: 'Review',
     foreignField: 'event',

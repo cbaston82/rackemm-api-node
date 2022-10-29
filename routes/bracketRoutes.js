@@ -1,16 +1,19 @@
 const express = require('express')
 const bracketController = require('../controllers/bracketController')
-const authController = require('../middleware/authMiddleware')
+const authMiddleware = require('../middleware/authMiddleware')
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
+
+// PUBLIC ROUTES
+router.route('/').get(bracketController.getAllBrackets)
 
 // AUTH ROUTES
-router.use(authController.requireSignin, authController.restrictTo('subscriber', 'administrator'))
-router.route('/').post(bracketController.createBracket).get(bracketController.getAllBrackets)
+router.use(authMiddleware.requireSignin, authMiddleware.restrictTo('user', 'subscriber'))
+router.route('/').post(bracketController.createBracket)
 router
     .route('/:id')
-    .get(bracketController.getABracket)
-    .delete(bracketController.deleteABracket)
+    .delete(bracketController.deleteBracket)
     .patch(bracketController.updateBracket)
+    .get(bracketController.getBracket)
 
 module.exports = router

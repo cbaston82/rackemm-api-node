@@ -32,7 +32,7 @@ exports.uploadMedia = catchAsync(async (req, res, next) => {
 exports.getUserMedia = catchAsync(async (req, res, next) => {
     const media = await Media.find({ user: toId(req.user._id) }).sort({ createdAt: -1 })
 
-    res.status(200).json({ status: 'success', data: media })
+    res.status(200).json({ status: 'success', results: media.length, data: media })
 })
 
 exports.deleteMedia = catchAsync(async (req, res, next) => {

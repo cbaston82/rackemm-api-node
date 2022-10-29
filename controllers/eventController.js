@@ -21,7 +21,7 @@ exports.getEventsPublic = catchAsync(async (req, res, next) => {
 })
 
 exports.getEventPublic = catchAsync(async (req, res, next) => {
-    const event = await Event.findOne({ _id: toId(req.params.id) }).populate('reviews')
+    const event = await Event.findOne({ _id: toId(req.params.id) }).populate('reviews brackets')
 
     if (!event) {
         return next(new AppError('No event found', 404))
@@ -41,7 +41,7 @@ exports.getEvents = catchAsync(async (req, res, next) => {
 
     const events = await features.query
 
-    res.status(200).json({ status: 'success', data: events })
+    res.status(200).json({ status: 'success', results: events.length, data: events })
 })
 
 exports.getEvent = catchAsync(async (req, res, next) => {
@@ -101,5 +101,5 @@ exports.getEventStats = catchAsync(async (req, res, next) => {
             },
         },
     ])
-    res.status(200).json({ starus: 'success', data: stats })
+    res.status(200).json({ status: 'success', data: stats })
 })

@@ -17,7 +17,7 @@ exports.createFilter = catchAsync(async (req, res) => {
 exports.getAllFilters = catchAsync(async (req, res) => {
     const filters = await Filter.find({ user: toId(req.user._id) })
 
-    res.status(200).json({ status: 'success', data: filters })
+    res.status(200).json({ status: 'success', results: filters.length, data: filters })
 })
 
 exports.updateFilter = catchAsync(async (req, res, next) => {

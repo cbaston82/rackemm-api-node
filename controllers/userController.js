@@ -32,7 +32,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
         return next(new AppError('Could not delete account', 400))
     }
 
-    res.status(200).json({ status: 'success', message: 'Account was deleted' })
+    res.status(200).json({ status: 'success', message: 'Dashboard was deleted' })
 })
 
 exports.createUser = catchAsync(async (req, res, next) => {
@@ -97,7 +97,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
         next(new AppError('Could not delete account', 400))
     }
 
-    res.status(200).json({ status: 'success', message: 'Account was deleted' })
+    res.status(200).json({ status: 'success', message: 'Dashboard was deleted' })
 })
 
 exports.getMe = catchAsync(async (req, res, next) => {

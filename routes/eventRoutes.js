@@ -3,10 +3,12 @@ const eventController = require('../controllers/eventController')
 const eventsMiddleware = require('../middleware/eventsMiddleware')
 const authMiddleware = require('../middleware/authMiddleware')
 const reviewRouter = require('./reviewRouter')
+const bracketRouter = require('./bracketRoutes')
 
 const router = express.Router()
 
 // MOUNT ROUTER REVIEWS
+router.use('/:eventId/brackets', bracketRouter)
 router.use('/:eventId/reviews', reviewRouter)
 
 // PUBLIC ROUTES
