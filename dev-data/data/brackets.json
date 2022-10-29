@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "635c73533376f6bd4e4c5210",
+    "date": "1667002784",
+    "title": "First Bracket",
+    "url": "https://challonge.com/xj2sgfzk?fbclid=IwAR2nnKFaxdEFGJW-nbU_1xogcyvdhXrHiStRCktjKs3vpG55LgxZ7zI9Y9k",
+    "event": "633ca03983fe450aaec4bc45",
+    "user": "633cb15db51ff6688de21fb6"
+  },
+  {
+    "_id": "635c73603376f6bd4e4c5214",
+    "date": "1667002784",
+    "title": "Second Bracket",
+    "url": "https://challonge.com/xj2sgfzk?fbclid=IwAR2nnKFaxdEFGJW-nbU_1xogcyvdhXrHiStRCktjKs3vpG55LgxZ7zI9Y9k",
+    "event": "633ca03983fe450aaec4bc45",
+    "user": "633cb15db51ff6688de21fb6"
+  },
+  {
+    "_id": "635c736a3376f6bd4e4c5218",
+    "date": "1667002784",
+    "title": "Third Bracket",
+    "url": "https://challonge.com/xj2sgfzk?fbclid=IwAR2nnKFaxdEFGJW-nbU_1xogcyvdhXrHiStRCktjKs3vpG55LgxZ7zI9Y9k",
+    "event": "633ca03983fe450aaec4bc45",
+    "user":"633cb15db51ff6688de21fb6"
+  }
+]

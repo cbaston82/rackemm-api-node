@@ -4,9 +4,12 @@ const unixTimestamp = require('mongoose-unix-timestamp')
 const { Schema } = mongoose
 const bracketSchema = new Schema(
     {
+        date: {
+            type: String,
+            required: [true, 'Date is required'],
+        },
         title: {
             type: String,
-            required: [true, 'Title is required'],
         },
         url: {
             type: String,
