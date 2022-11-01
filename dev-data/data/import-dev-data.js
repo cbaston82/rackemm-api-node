@@ -10,7 +10,7 @@ const Bracket = require('../../models/bracketModel')
 
 dotenv.config({ path: './config.env' })
 
-mongoose.connect(process.env.MONGO_URI_LOCAL).then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log('connect to Mongo Database')
 })
 

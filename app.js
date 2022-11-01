@@ -2,6 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const expressValidator = require('express-validator')
 const morgan = require('morgan')
+const cors = require('cors')
 const rateLimit = require('express-rate-limit')
 const helmet = require('helmet')
 const mongoSanitize = require('express-mongo-sanitize')
@@ -20,6 +21,9 @@ const reviewRouter = require('./routes/reviewRouter')
 const stripeController = require('./controllers/stripeController')
 
 const app = express()
+
+app.use(cors())
+
 // SET SECURITY HTTP HEADERS
 app.use(helmet())
 if (process.env.NODE_ENV === 'development') {
