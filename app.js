@@ -22,7 +22,7 @@ const stripeController = require('./controllers/stripeController')
 
 const app = express()
 
-const whitelist = ['https://rackemm.netlify.app']
+const whitelist = ['https://rackemm.netlify.app', 'http:127.0.0.1']
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
