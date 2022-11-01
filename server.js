@@ -9,9 +9,15 @@ process.on('uncaughtException', (err) => {
 
 const app = require('./app')
 
-mongoose.connect(process.env.MONGO_URI_LOCAL).then(() => {
-    console.log('connect to Mongo Database')
-})
+if (process.env.NODE_ENV === 'development') {
+    mongoose.connect(process.env.MONGO_URI_LOCAL).then(() => {
+        console.log('connect to Mongo Database - Development')
+    })
+} else {
+    mongoose.connect(process.env.MONGO_URI).then(() => {
+        console.log('connect to Mongo Database - Production')
+    })
+}
 
 const server = app.listen(process.env.PORT || 4000, () => {
     // eslint-disable-next-line no-console
