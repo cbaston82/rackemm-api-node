@@ -22,32 +22,32 @@ const stripeController = require('./controllers/stripeController')
 
 const app = express()
 
-if (process.env.NODE_ENV === 'production') {
-    const whitelist = ['https://rackemm.netlify.app']
-    const corsOptions = {
-        origin: function (origin, callback) {
-            if (whitelist.indexOf(origin) !== -1) {
-                callback(null, true)
-            } else {
-                callback(new Error('Not allowed by CORS'))
-            }
-        },
-        methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-        credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
-        allowedHeaders: [
-            'Content-Type',
-            'Authorization',
-            'X-Requested-With',
-            'device-remember-token',
-            'Access-Control-Allow-Origin',
-            'Origin',
-            'Accept',
-        ],
-    }
-
-    app.use(cors(corsOptions))
-}
+// if (process.env.NODE_ENV === 'production') {
+//     const whitelist = ['https://rackemm.netlify.app', 'https://rackemm.herokuapp.com']
+//     const corsOptions = {
+//         origin: function (origin, callback) {
+//             if (whitelist.indexOf(origin) !== -1) {
+//                 callback(null, true)
+//             } else {
+//                 callback(new Error('Not allowed by CORS'))
+//             }
+//         },
+//         methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+//         optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+//         credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
+//         allowedHeaders: [
+//             'Content-Type',
+//             'Authorization',
+//             'X-Requested-With',
+//             'device-remember-token',
+//             'Access-Control-Allow-Origin',
+//             'Origin',
+//             'Accept',
+//         ],
+//     }
+//
+//     app.use(cors(corsOptions))
+// }
 
 // SET SECURITY HTTP HEADERS
 app.use(helmet())
