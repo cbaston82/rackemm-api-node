@@ -22,7 +22,7 @@ const stripeController = require('./controllers/stripeController')
 
 const app = express()
 
-if (process.env.production) {
+if (process.env.NODE_ENV === 'production') {
     const whitelist = ['https://rackemm.netlify.app']
     const corsOptions = {
         origin: function (origin, callback) {
