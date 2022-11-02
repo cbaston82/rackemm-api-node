@@ -36,7 +36,7 @@ exports.checkoutUser = async (req, res) => {
                 },
             ],
             customer: customerId,
-            success_url: `${YOUR_DOMAIN}/account/profile?success=true&session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${YOUR_DOMAIN}/account?success=true&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${YOUR_DOMAIN}/pricing?canceled=true`,
         })
         res.json(session.url)
@@ -50,7 +50,7 @@ exports.createPortalSession = async (req, res) => {
 
     const session = await stripe.billingPortal.sessions.create({
         customer: customerId,
-        return_url: `${YOUR_DOMAIN}/account/profile`,
+        return_url: `${YOUR_DOMAIN}/account`,
     })
 
     res.json(session.url)
