@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser')
 const express = require('express')
 const expressValidator = require('express-validator')
 const morgan = require('morgan')
@@ -21,13 +20,6 @@ const reviewRouter = require('./routes/reviewRouter')
 const stripeController = require('./controllers/stripeController')
 
 const app = express()
-
-// cannot run through jsonParser
-app.post(
-    '/api/v1/stripe/webhook',
-    express.raw({ type: 'application/json' }),
-    stripeController.webhook,
-)
 
 // if (process.env.NODE_ENV === 'production') {
 //     const whitelist = ['https://rackemm.netlify.app', 'https://rackemm.herokuapp.com']
@@ -60,7 +52,6 @@ app.use(cors())
 
 // SET SECURITY HTTP HEADERS
 app.use(helmet())
-
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'))
 }
@@ -72,6 +63,9 @@ const limiter = rateLimit({
     message: 'Too many requests from your IP, try again in an hour',
 })
 app.use('/api', limiter)
+
+// cannot run through jsonParser
+app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 // BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY
 app.use(express.json({ limit: '512MB' }))
