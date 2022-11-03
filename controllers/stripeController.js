@@ -58,13 +58,14 @@ exports.createPortalSession = async (req, res) => {
 
 // check webhooks
 exports.webhook = async (req, res) => {
-    const payload = req.body
     const sig = req.headers['stripe-signature']
-    console.log(sig)
+    console.log('sig', sig)
+    console.log('payload', req.body)
+    console.log('endpointSecret', endpointSecret)
     let event
 
     try {
-        event = stripe.webhooks.constructEvent(payload, sig, endpointSecret)
+        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret)
     } catch (err) {
         res.status(400).send(`Webhook Error: ${err.message}`)
         return
