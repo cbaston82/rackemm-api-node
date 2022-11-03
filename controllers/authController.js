@@ -152,7 +152,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 })
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-    const user = await User.findOne({ user: toId(req.user._id) }).select('+password')
+    const user = await User.find({ _id: toId(req.user._id) }).select('+password')
 
     if (!user) {
         return next(new AppError('Could not update password', 400))
