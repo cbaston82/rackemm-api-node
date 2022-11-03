@@ -66,7 +66,11 @@ const limiter = rateLimit({
 app.use('/api', limiter)
 
 // cannot run through jsonParser
-app.post('/api/v1/stripe/webhook', stripeController.webhook)
+app.post(
+    '/api/v1/stripe/webhook',
+    express.raw({ type: 'application/json' }),
+    stripeController.webhook,
+)
 
 // BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY
 app.use(express.json({ limit: '512MB' }))

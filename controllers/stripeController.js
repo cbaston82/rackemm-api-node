@@ -60,6 +60,7 @@ exports.createPortalSession = async (req, res) => {
 exports.webhook = async (req, res) => {
     const payload = req.body
     const sig = req.headers['stripe-signature']
+    console.log(sig)
     let event
 
     try {
