@@ -21,32 +21,35 @@ const stripeController = require('./controllers/stripeController')
 
 const app = express()
 
-// if (process.env.NODE_ENV === 'production') {
-//     const whitelist = ['https://rackemm.netlify.app', 'https://rackemm.herokuapp.com']
-//     const corsOptions = {
-//         origin: function (origin, callback) {
-//             if (whitelist.indexOf(origin) !== -1) {
-//                 callback(null, true)
-//             } else {
-//                 callback(new Error('Not allowed by CORS'))
-//             }
-//         },
-//         methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-//         optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-//         credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
-//         allowedHeaders: [
-//             'Content-Type',
-//             'Authorization',
-//             'X-Requested-With',
-//             'device-remember-token',
-//             'Access-Control-Allow-Origin',
-//             'Origin',
-//             'Accept',
-//         ],
-//     }
-//
-//     app.use(cors(corsOptions))
-// }
+// cannot run through jsonParser
+app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
+
+if (process.env.NODE_ENV === 'production') {
+    const whitelist = ['https://rackemm.netlify.app']
+    const corsOptions = {
+        origin: function (origin, callback) {
+            if (whitelist.indexOf(origin) !== -1) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
+        methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+        credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
+        allowedHeaders: [
+            'Content-Type',
+            'Authorization',
+            'X-Requested-With',
+            'device-remember-token',
+            'Access-Control-Allow-Origin',
+            'Origin',
+            'Accept',
+        ],
+    }
+
+    app.use(cors(corsOptions))
+}
 
 app.use(cors())
 
@@ -63,9 +66,6 @@ const limiter = rateLimit({
     message: 'Too many requests from your IP, try again in an hour',
 })
 app.use('/api', limiter)
-
-// cannot run through jsonParser
-app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 // BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY
 app.use(express.json({ limit: '512MB' }))
