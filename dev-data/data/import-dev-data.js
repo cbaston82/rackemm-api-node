@@ -7,10 +7,15 @@ const Review = require('../../models/reviewModel')
 const StripeAccount = require('../../models/stripeAccountModel')
 const User = require('../../models/userModel')
 const Bracket = require('../../models/bracketModel')
+const Media = require('../../models/Media')
 
 dotenv.config({ path: './config.env' })
 
-mongoose.connect(process.env.MONGO_URI).then(() => {
+if (process.env.NODE_ENV !== 'development') {
+    return
+}
+
+mongoose.connect(process.env.MONGO_URI_LOCAL).then(() => {
     console.log('connect to Mongo Database')
 })
 
@@ -48,6 +53,7 @@ const deleteData = async () => {
         await StripeAccount.deleteMany()
         await User.deleteMany()
         await Bracket.deleteMany()
+        await Media.deleteMany()
 
         console.log('Data Deleted!')
 

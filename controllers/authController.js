@@ -68,7 +68,10 @@ exports.signUp = catchAsync(async (req, res, next) => {
         passwordConfirm: req.body.passwordConfirm,
     })
 
-    const customer = await stripe.customers.create({ email: req.body.email })
+    const customer = await stripe.customers.create({
+        email: req.body.email,
+        name: req.body.fullName,
+    })
 
     if (!customer) {
         return next(new AppError('Something went wrong!', 400))
@@ -78,6 +81,8 @@ exports.signUp = catchAsync(async (req, res, next) => {
         user: toId(user._id),
         user_email: req.body.email,
         customerId: customer.id,
+        customerEmail: req.body.email,
+        customerName: req.body.fullName,
     })
 
     if (!stripeCustomer) {
