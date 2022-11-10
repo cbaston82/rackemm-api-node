@@ -58,5 +58,17 @@
     "role": "user",
     "photo": "",
     "active": false
+  },
+  {
+    "_id": "63670cceb247e81dbe62ab3d",
+    "email": "jack.n.murray74@gmail.com",
+    "fullName": "Jack Murray",
+    "photo": "",
+    "password": "jm123!@#",
+    "passwordConfirm": "jm123!@#",
+    "role": "subscriber",
+    "active": true,
+    "created_at": 1667697870084,
+    "updated_at": 1667698049268
   }
 ]

@@ -26,6 +26,7 @@ app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeControlle
 
 if (process.env.NODE_ENV === 'production') {
     const whitelist = ['https://rackemm.netlify.app']
+
     const corsOptions = {
         origin: function (origin, callback) {
             if (whitelist.indexOf(origin) !== -1) {
@@ -34,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
                 callback(new Error('Not allowed by CORS'))
             }
         },
-        methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
         optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
         allowedHeaders: [
@@ -49,15 +50,13 @@ if (process.env.NODE_ENV === 'production') {
     }
 
     app.use(cors(corsOptions))
+} else if (process.env.NODE_ENV !== 'production') {
+    app.use(cors())
+    app.use(morgan('dev'))
 }
-
-app.use(cors())
 
 // SET SECURITY HTTP HEADERS
 app.use(helmet())
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'))
-}
 
 // SET LIMIT REQUEST FROM SAME IP
 const limiter = rateLimit({
