@@ -25,7 +25,7 @@ const app = express()
 app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 if (process.env.NODE_ENV === 'production') {
-    const whitelist = ['https://rackemm.netlify.app']
+    const whitelist = ['www.rackemm.com', 'https://rackemm.com']
 
     const corsOptions = {
         origin: function (origin, callback) {

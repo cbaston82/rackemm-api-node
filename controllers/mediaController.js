@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Media = require('../models/media')
+const Media = require('../models/mediaModel')
 const catchAsync = require('../utils/catchAsync')
 const { cloudinary } = require('../utils/cloudinary')
 const AppError = require('../utils/appError')
@@ -30,7 +30,9 @@ exports.uploadMedia = catchAsync(async (req, res, next) => {
 })
 
 exports.getUserMedia = catchAsync(async (req, res, next) => {
-    const media = await Media.find({ user: toId(req.user._id) }).sort({ createdAt: -1 })
+    console.log(req.user._id)
+    const media = await Media.find({}).sort({ createdAt: -1 })
+    console.log(media)
 
     res.status(200).json({ status: 'success', results: media.length, data: media })
 })

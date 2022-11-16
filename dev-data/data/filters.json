@@ -1,37 +1,3 @@
 [
-  {
-    "_id": "633cb1e0b51ff6688de21fc8",
-    "url": "/weekly-events?buyIn=null&city=null&day=null&game=null&filter=9-ball",
-    "description": "9-Ball only filter for level1 user",
-    "type": "weekly",
-    "user": "633cb15db51ff6688de21fb6"
-  },
-  {
-    "_id": "633cb1f5b51ff6688de21fce",
-    "url": "/weekly-events?buyIn=99&city=all&day=Friday&game=all&filter=",
-    "description": "Friday Nights for level1 user",
-    "type": "weekly",
-    "user": "633cb15db51ff6688de21fb6"
-  },
-  {
-    "_id": "633cb210b51ff6688de21fd7",
-    "url": "/yearly-events?buyIn=50&city=null&game=null&filter=null",
-    "description": "Under $50 for level1 user",
-    "type": "yearly",
-    "user": "633cb15db51ff6688de21fb6"
-  },
-  {
-    "_id": "633df356a882d8dcf232527c",
-    "url": "/weekly-events?buyIn=null&city=null&day=null&game=9-ball&filter=null",
-    "description": "9-Ball for level2 user",
-    "type": "weekly",
-    "user": "633c93c2b49a36b3a3b19189"
-  },
-  {
-    "$_idd": "633df36ea882d8dcf2325285",
-    "url": "/yearly-events?buyIn=51&city=null&game=null&filter=null",
-    "description": "Under $50 for level2 user",
-    "type": "yearly",
-    "user": "633c93c2b49a36b3a3b19189"
-  }
+
 ]

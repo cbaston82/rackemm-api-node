@@ -7,7 +7,7 @@ const Review = require('../../models/reviewModel')
 const StripeAccount = require('../../models/stripeAccountModel')
 const User = require('../../models/userModel')
 const Bracket = require('../../models/bracketModel')
-const Media = require('../../models/Media')
+const Media = require('../../models/mediaModel')
 
 dotenv.config({ path: './config.env' })
 
@@ -26,6 +26,7 @@ const reviews = JSON.parse(fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8')
 const stripeAccounts = JSON.parse(fs.readFileSync(`${__dirname}/stripe-accounts.json`, 'utf-8'))
 const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'))
 const brackets = JSON.parse(fs.readFileSync(`${__dirname}/brackets.json`, 'utf-8'))
+const media = JSON.parse(fs.readFileSync(`${__dirname}/media.json`, 'utf-8'))
 
 // IMPORT DATA INTO DB
 const importData = async () => {
@@ -36,6 +37,7 @@ const importData = async () => {
         await StripeAccount.create(stripeAccounts)
         await User.create(users)
         await Bracket.create(brackets)
+        await Media.create(media)
 
         console.log('Data imported')
         process.exit()
