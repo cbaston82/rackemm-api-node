@@ -30,6 +30,7 @@ if (process.env.NODE_ENV === 'production') {
         'https://rackemm.com',
         'https://www.rackemm.com',
         'https://rackemm.netlify.app',
+        'https://checkout.stripe.com',
     ]
 
     const corsOptions = {
