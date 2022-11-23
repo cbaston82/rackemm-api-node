@@ -25,11 +25,42 @@ const app = express()
 app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 if (process.env.NODE_ENV === 'production') {
-    const whitelist = ['https://www.rackemm.com']
+    const whitelist = [
+        'https://www.rackemm.com',
+        'a.stripecdn.com',
+        'api.stripe.com',
+        'atlas.stripe.com',
+        'auth.stripe.com',
+        'b.stripecdn.com',
+        'billing.stripe.com',
+        'buy.stripe.com',
+        'c.stripecdn.com',
+        'checkout.stripe.com',
+        'climate.stripe.com',
+        'connect.stripe.com',
+        'dashboard.stripe.com',
+        'express.stripe.com',
+        'files.stripe.com',
+        'hooks.stripe.com',
+        'invoice.stripe.com',
+        'invoicedata.stripe.com',
+        'js.stripe.com',
+        'm.stripe.com',
+        'm.stripe.network',
+        'manage.stripe.com',
+        'pay.stripe.com',
+        'payments.stripe.com',
+        'q.stripe.com',
+        'qr.stripe.com',
+        'r.stripe.com',
+        'verify.stripe.com',
+        'stripe.com',
+        'terminal.stripe.com',
+        'uploads.stripe.com',
+    ]
 
     const corsOptions = {
         origin: function (origin, callback) {
-            console.log('=================', origin)
             if (whitelist.indexOf(origin) !== -1) {
                 callback(null, true)
             } else {
