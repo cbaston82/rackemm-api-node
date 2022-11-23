@@ -22,14 +22,7 @@ const stripeController = require('./controllers/stripeController')
 const app = express()
 
 if (process.env.NODE_ENV === 'production') {
-    const corsOptions = {
-        origin: 'https://www.rackemm.com',
-        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-        credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
-    }
-
-    app.use(cors(corsOptions))
+    app.use(cors())
 } else if (process.env.NODE_ENV !== 'production') {
     app.use(cors())
     app.use(morgan('dev'))
