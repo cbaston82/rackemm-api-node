@@ -39,7 +39,7 @@ exports.checkoutUser = async (req, res) => {
             success_url: `${YOUR_DOMAIN}/account?success=true&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${YOUR_DOMAIN}/pricing?canceled=true`,
         })
-        res.status(200).json(session.url)
+        res.json(session.url)
     } catch (error) {
         console.log('non')
     }
