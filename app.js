@@ -48,8 +48,7 @@ if (process.env.NODE_ENV === 'production') {
     //         'Accept',
     //     ],
     // }
-
-    app.use(cors())
+    // app.use(cors())
 } else if (process.env.NODE_ENV !== 'production') {
     app.use(cors())
     app.use(morgan('dev'))
