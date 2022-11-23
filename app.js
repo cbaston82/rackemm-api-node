@@ -25,18 +25,36 @@ const app = express()
 app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 if (process.env.NODE_ENV === 'production') {
-    app.use((req, res, next) => {
-        res.append('Access-Control-Allow-Origin', 'https://www.rackemm.com')
-        res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-        res.append(
-            'Access-Control-Allow-Headers',
-            'Content-Type,Authorization,X-Requested-With, device-remember-token, Access-Control-Allow-Origin, Origin, Accept',
-        )
-        next()
-    })
-    app.options('/*', (_, res) => {
-        res.sendStatus(200)
-    })
+    const whitelist = [
+        'www.rackemm.com',
+        'https://rackemm.com',
+        'https://www.rackemm.com',
+        'https://rackemm.netlify.app',
+    ]
+
+    const corsOptions = {
+        origin: function (origin, callback) {
+            if (whitelist.indexOf(origin) !== -1) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
+        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+        credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
+        allowedHeaders: [
+            'Content-Type',
+            'Authorization',
+            'X-Requested-With',
+            'device-remember-token',
+            'Access-Control-Allow-Origin',
+            'Origin',
+            'Accept',
+        ],
+    }
+
+    app.use(cors(corsOptions))
 } else if (process.env.NODE_ENV !== 'production') {
     app.use(cors())
     app.use(morgan('dev'))
