@@ -25,30 +25,31 @@ const app = express()
 app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 if (process.env.NODE_ENV === 'production') {
-    // const whitelist = ['https://www.rackemm.com']
-    //
-    // const corsOptions = {
-    //     origin: function (origin, callback) {
-    //         if (whitelist.indexOf(origin) !== -1) {
-    //             callback(null, true)
-    //         } else {
-    //             callback(new Error('Not allowed by CORS'))
-    //         }
-    //     },
-    //     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    //     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    //     credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
-    //     allowedHeaders: [
-    //         'Content-Type',
-    //         'Authorization',
-    //         'X-Requested-With',
-    //         'device-remember-token',
-    //         'Access-Control-Allow-Origin',
-    //         'Origin',
-    //         'Accept',
-    //     ],
-    // }
-    // app.use(cors())
+    const whitelist = ['https://www.rackemm.com']
+
+    const corsOptions = {
+        origin: function (origin, callback) {
+            if (whitelist.indexOf(origin) !== -1) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
+        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+        credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
+        allowedHeaders: [
+            'Content-Type',
+            'Authorization',
+            'X-Requested-With',
+            'device-remember-token',
+            'Access-Control-Allow-Origin',
+            'Origin',
+            'Accept',
+        ],
+    }
+
+    app.use(cors(corsOptions))
 } else if (process.env.NODE_ENV !== 'production') {
     app.use(cors())
     app.use(morgan('dev'))
