@@ -41,7 +41,7 @@ exports.checkoutUser = async (req, res) => {
         })
         res.json(session.url)
     } catch (error) {
-        console.log('non')
+        console.log(error)
     }
 }
 
@@ -59,9 +59,9 @@ exports.createPortalSession = async (req, res) => {
 // check webhooks
 exports.webhook = async (req, res) => {
     const sig = req.headers['stripe-signature']
-    console.log('sig', sig)
-    console.log('payload', req.body)
-    console.log('endpointSecret', endpointSecret)
+    // console.log('sig', sig)
+    // console.log('payload', req.body)
+    // console.log('endpointSecret', endpointSecret)
     let event
 
     try {
