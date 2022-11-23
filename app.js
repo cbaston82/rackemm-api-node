@@ -31,6 +31,7 @@ if (process.env.NODE_ENV === 'production') {
         'https://www.rackemm.com',
         'https://rackemm.netlify.app',
         'https://checkout.stripe.com',
+        'https://rackemm.herokuapp.com',
     ]
 
     const corsOptions = {
