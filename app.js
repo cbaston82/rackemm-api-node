@@ -25,54 +25,55 @@ const app = express()
 app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 if (process.env.NODE_ENV === 'production') {
-    const whitelist = [
-        'https://www.rackemm.com',
-        'a.stripecdn.com',
-        'api.stripe.com',
-        'atlas.stripe.com',
-        'auth.stripe.com',
-        'b.stripecdn.com',
-        'billing.stripe.com',
-        'buy.stripe.com',
-        'c.stripecdn.com',
-        'checkout.stripe.com',
-        'climate.stripe.com',
-        'connect.stripe.com',
-        'dashboard.stripe.com',
-        'express.stripe.com',
-        'files.stripe.com',
-        'hooks.stripe.com',
-        'invoice.stripe.com',
-        'invoicedata.stripe.com',
-        'js.stripe.com',
-        'm.stripe.com',
-        'm.stripe.network',
-        'manage.stripe.com',
-        'pay.stripe.com',
-        'payments.stripe.com',
-        'q.stripe.com',
-        'qr.stripe.com',
-        'r.stripe.com',
-        'verify.stripe.com',
-        'stripe.com',
-        'terminal.stripe.com',
-        'uploads.stripe.com',
-    ]
-
-    const corsOptions = {
-        origin: function (origin, callback) {
-            if (whitelist.indexOf(origin) !== -1) {
-                callback(null, true)
-            } else {
-                callback(new Error('Not allowed by CORS'))
-            }
-        },
-        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-        credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
-    }
-
-    app.use(cors(corsOptions))
+    // const whitelist = [
+    //     'https://www.rackemm.com',
+    //     'a.stripecdn.com',
+    //     'api.stripe.com',
+    //     'atlas.stripe.com',
+    //     'auth.stripe.com',
+    //     'b.stripecdn.com',
+    //     'billing.stripe.com',
+    //     'buy.stripe.com',
+    //     'c.stripecdn.com',
+    //     'checkout.stripe.com',
+    //     'climate.stripe.com',
+    //     'connect.stripe.com',
+    //     'dashboard.stripe.com',
+    //     'express.stripe.com',
+    //     'files.stripe.com',
+    //     'hooks.stripe.com',
+    //     'invoice.stripe.com',
+    //     'invoicedata.stripe.com',
+    //     'js.stripe.com',
+    //     'm.stripe.com',
+    //     'm.stripe.network',
+    //     'manage.stripe.com',
+    //     'pay.stripe.com',
+    //     'payments.stripe.com',
+    //     'q.stripe.com',
+    //     'qr.stripe.com',
+    //     'r.stripe.com',
+    //     'verify.stripe.com',
+    //     'stripe.com',
+    //     'terminal.stripe.com',
+    //     'uploads.stripe.com',
+    // ]
+    //
+    // const corsOptions = {
+    //     origin: function (origin, callback) {
+    //         if (whitelist.indexOf(origin) !== -1) {
+    //             callback(null, true)
+    //         } else {
+    //             callback(new Error('Not allowed by CORS'))
+    //         }
+    //     },
+    //     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    //     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    //     credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
+    // }
+    //
+    // app.use(cors(corsOptions))
+    app.use(cors())
 } else if (process.env.NODE_ENV !== 'production') {
     app.use(cors())
     app.use(morgan('dev'))
