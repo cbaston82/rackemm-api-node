@@ -21,9 +21,6 @@ const stripeController = require('./controllers/stripeController')
 
 const app = express()
 
-// cannot run through jsonParser
-app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
-
 if (process.env.NODE_ENV === 'production') {
     const whitelist = [
         'www.rackemm.com',
@@ -59,6 +56,9 @@ if (process.env.NODE_ENV === 'production') {
     app.use(cors())
     app.use(morgan('dev'))
 }
+
+// cannot run through jsonParser
+app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 // SET SECURITY HTTP HEADERS
 app.use(helmet())
