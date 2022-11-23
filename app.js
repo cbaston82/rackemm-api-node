@@ -30,8 +30,7 @@ if (process.env.NODE_ENV === 'production') {
         res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
         res.append(
             'Access-Control-Allow-Headers',
-            'Content-Type',
-            'Authorization,X-Requested-With, device-remember-token, Access-Control-Allow-Origin, Origin, Accept',
+            'Content-Type,Authorization,X-Requested-With, device-remember-token, Access-Control-Allow-Origin, Origin, Accept',
         )
         next()
     })
