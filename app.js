@@ -35,6 +35,9 @@ if (process.env.NODE_ENV === 'production') {
         )
         next()
     })
+    app.options('/*', (_, res) => {
+        res.sendStatus(200)
+    })
 } else if (process.env.NODE_ENV !== 'production') {
     app.use(cors())
     app.use(morgan('dev'))
