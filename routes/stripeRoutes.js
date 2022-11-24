@@ -5,7 +5,6 @@ const authController = require('../middleware/authMiddleware')
 const router = express.Router()
 
 // PUBLIC ROUTES
-router.post('/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 // AUTH ROUTES
 router.use(authController.requireSignin)

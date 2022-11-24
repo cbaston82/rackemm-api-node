@@ -17,8 +17,12 @@ const stripeRouter = require('./routes/stripeRoutes')
 const mediaRouter = require('./routes/mediaRoutes')
 const authRouter = require('./routes/authRoutes')
 const reviewRouter = require('./routes/reviewRouter')
+const stripeController = require('./controllers/stripeController')
 
 const app = express()
+
+// cannot run through jsonParser
+app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeController.webhook)
 
 if (process.env.NODE_ENV === 'production') {
     const whitelist = [
@@ -85,15 +89,8 @@ const limiter = rateLimit({
 })
 app.use('/api', limiter)
 
-// BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY.
-app.use((req, res, next) => {
-    if (req.originalUrl === '/api/v1/stripe/webhook') {
-        next()
-    } else {
-        app.use(express.json({ limit: '512MB' }))
-    }
-})
-
+// BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY
+app.use(express.json({ limit: '512MB' }))
 app.use(expressValidator())
 
 // SANITIZE DATA AGAINST NOSQL QUERY INJECTION
