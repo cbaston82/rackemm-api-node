@@ -87,7 +87,7 @@ const limiter = rateLimit({
 })
 app.use('/api', limiter)
 
-// BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY
+// BODY PARSER, TAKES PAYLOAD BODY AND PUTS IT IN REQ.BODY.
 app.use((req, res, next) => {
     if (req.originalUrl === '/api/v1/stripe/webhook') {
         next()
