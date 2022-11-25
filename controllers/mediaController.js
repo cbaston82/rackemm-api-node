@@ -31,7 +31,7 @@ exports.uploadMedia = catchAsync(async (req, res, next) => {
 
 exports.getUserMedia = catchAsync(async (req, res, next) => {
     // console.log(req.user._id)
-    const media = await Media.find({}).sort({ createdAt: -1 })
+    const media = await Media.find({ user: toId(req.user._id) }).sort({ createdAt: -1 })
     // console.log(media)
 
     res.status(200).json({ status: 'success', results: media.length, data: media })

@@ -58,6 +58,11 @@ const eventSchema = new Schema(
             type: String,
             required: [true, 'Zipcode is required'],
         },
+        phoneNumber: {
+            type: String,
+            trim: true,
+            required: [true, 'Phone number is required'],
+        },
         ratingSystem: {
             type: String,
             required: [true, 'Rating system is required'],
