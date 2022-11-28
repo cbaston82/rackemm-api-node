@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const toId = mongoose.Types.ObjectId
+const convertTime = require('convert-time')
 const catchAsync = require('../utils/catchAsync')
 const Event = require('../models/eventModel')
 const AppError = require('../utils/appError')
@@ -65,6 +66,9 @@ exports.deleteEvent = catchAsync(async (req, res, next) => {
 })
 
 exports.createEvent = catchAsync(async (req, res, next) => {
+    const startTimeParts = req.body.startTime.split('T')
+    console.log(convertTime(startTimeParts[1]))
+
     const user = toId(req.user._id)
     const event = await Event.create({ ...req.body, user })
 

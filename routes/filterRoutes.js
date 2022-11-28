@@ -4,9 +4,12 @@ const authController = require('../middleware/authMiddleware')
 
 const router = express.Router()
 
-// AUTH ROUTES
-router.use(authController.requireSignin, authController.restrictTo('subscriber', 'administrator'))
+router.use(authController.requireSignin)
+
+router.route('/').post(filterController.createFilter)
+
 router.route('/').post(filterController.createFilter).get(filterController.getAllFilters)
+
 router
     .route('/:id')
     .get(filterController.getAFilter)
