@@ -119,7 +119,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
             supportEmail: process.env.SUPPORT_EMAIL,
         })
 
-        console.log('sendMailResults', sendMailResults)
+        console.log('sendMailResults =====', sendMailResults)
 
         res.status(200).json({ status: 'success', message: 'Token sent. Check your email.' })
     } catch (error) {
