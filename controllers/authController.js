@@ -112,12 +112,14 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
         const message = `You requested to reset your password. Click on the link to be redirected ${resetURL}. \nIf you didn't request a password reset please ignore this email.`
 
-        await sendEmail({
+        const sendMailResults = await sendEmail({
             email: req.body.email,
             subject: 'Your password reset token',
             message,
             supportEmail: process.env.SUPPORT_EMAIL,
         })
+
+        console.log('sendMailResults', sendMailResults)
 
         res.status(200).json({ status: 'success', message: 'Token sent. Check your email.' })
     } catch (error) {

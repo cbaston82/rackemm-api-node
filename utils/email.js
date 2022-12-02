@@ -13,8 +13,8 @@ const sendEmail = async (options) => {
     }
     await sgMail
         .send(msg)
-        .then(() => {
-            console.log('Email sent')
+        .then((results) => {
+            console.log('results', results)
         })
         .catch((error) => {
             console.error(error.response.body)
