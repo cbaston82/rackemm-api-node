@@ -116,6 +116,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
             email: req.body.email,
             subject: 'Your password reset token',
             message,
+            supportEmail: process.env.SUPPORT_EMAIL,
         })
 
         res.status(200).json({ status: 'success', message: 'Token sent. Check your email.' })
@@ -124,7 +125,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
         user.passwordResetExpires = undefined
         await user.save()
 
-        res.status(400).json({ error: 'No user found with that email' })
+        return next(AppError('No user found with that email'))
     }
 })
 
