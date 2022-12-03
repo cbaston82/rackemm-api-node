@@ -103,9 +103,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
         await user.save()
 
-        const resetURL = `${req.protocol}://${req.get(
-            'host',
-        )}/api/v1/auth/reset-password/${resetToken}`
+        const resetURL = `${process.env.DOMAIN}/reset-password/${resetToken}`
 
         const message = `You requested to reset your password. Click on the link to be redirected ${resetURL}. \nIf you didn't request a password reset please ignore this email.`
 
@@ -148,8 +146,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     const token = createToken(user._id)
 
     res.status(201).json({
-        fullName: user.fullName,
-        email: user.email,
         token,
     })
 })
