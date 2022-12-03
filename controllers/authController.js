@@ -30,9 +30,6 @@ function sendToken(user, res, email) {
     return res.status(200).json({
         status: 'success',
         data: {
-            fullName: user.fullName,
-            id: user._id,
-            email,
             token,
         },
     })

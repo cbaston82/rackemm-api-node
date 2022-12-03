@@ -76,7 +76,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         return next(new AppError('Cannot update password here', 404))
     }
 
-    const filteredBody = filterObj(req.body, 'name', 'email')
+    const filteredBody = filterObj(req.body, 'fullName', 'email')
 
     const user = await User.findByIdAndUpdate(toId(req.user._id), filteredBody, {
         new: true,
@@ -104,7 +104,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
     const user = await User.findById(toId(req.user._id))
 
     if (!user) {
-        return next(new AppError('Could not get user information', 400))
+        return next(new AppError({ status: 'Error', data: 'Could not get user information' }, 400))
     }
 
     res.status(200).json({ status: 'successful', data: user })
