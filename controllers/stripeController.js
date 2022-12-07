@@ -126,6 +126,8 @@ exports.webhook = async (req, res) => {
                 },
             )
             break
+        case 'customer.subscription.deleted':
+            console.log('==== customer.subscription.deleted ====')
         default:
             console.log(`Unhandled event type ${event.type}`)
     }
