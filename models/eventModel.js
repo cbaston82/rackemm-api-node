@@ -9,7 +9,7 @@ const eventSchema = new Schema(
             type: String,
             trim: true,
             required: [true, 'Type is required'],
-            enum: ['weekly', 'yearly'],
+            enum: ['weekly', 'special'],
         },
         title: {
             type: String,
