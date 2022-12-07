@@ -16,6 +16,10 @@ const eventSchema = new Schema(
             trim: true,
             required: [true, 'Title is required'],
         },
+        bracket: {
+            type: String,
+            trim: true,
+        },
         description: {
             type: String,
             required: [true, 'Description is required'],
