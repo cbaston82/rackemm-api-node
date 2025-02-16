@@ -1,18 +1,18 @@
 [
   {
     "_id": "636d583f61459c5d49b58bf3",
-    "subscriptionId": "sub_1M2hJ8Kr4ipGkAARMvjFhERy",
-    "subscriptionPlanId": "price_1M2ePMKr4ipGkAARRBdd6UGe",
+    "subscriptionId": "sub_1M2hJT9rTipGkAARMvjFhERy",
+    "subscriptionPlanId": "price_1M2ePKMKr4ipGkBBRRBdd6UGe",
     "subscriptionStatus": "incomplete",
     "subscriptionFrequency": "month",
     "subscriptionStart": 1668111906,
     "subscriptionEnd": 1670703906,
     "userFreeTrial": "no",
-    "customerId": "cus_MmFPPc5DKsZWec",
+    "customerId": "cus_MmFPPc5DAsZWec",
     "customerEmail": "carlosbaston82@gmail.com",
     "customerName": "Carlos Baston",
     "user": "636d583e61459c5d49b58bf1",
-    "user_email": "carlosbaston82@gmail.com",
+    "user_email": "testuser1@test.com",
     "created_at": 1668110399653,
     "updated_at": 1668111910036
   }

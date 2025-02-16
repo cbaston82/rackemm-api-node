@@ -117,3 +117,5 @@ dist
 
 node_modules/
 .idea/
+config.env
+helpers/stripeHelpers.js

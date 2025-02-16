@@ -9,7 +9,7 @@ const eventSchema = new Schema(
             type: String,
             trim: true,
             required: [true, 'Type is required'],
-            enum: ['weekly', 'special'],
+            // enum: ['weekly', 'special'],
         },
         title: {
             type: String,
@@ -65,7 +65,7 @@ const eventSchema = new Schema(
         phoneNumber: {
             type: String,
             trim: true,
-            required: [true, 'Phone number is required'],
+            // required: [true, 'Phone number is required'],
         },
         ratingSystem: {
             type: String,

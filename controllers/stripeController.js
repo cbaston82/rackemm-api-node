@@ -13,6 +13,8 @@ exports.getUserStripeCustomer = async (req, res) => {
     const user = toId(req.user._id)
     const stripeCustomer = await StripeAccount.findOne({ user })
 
+    console.log(stripeCustomer)
+
     if (!stripeCustomer) {
         return res.status(400).json({ error: 'No such stripe customer' })
     }

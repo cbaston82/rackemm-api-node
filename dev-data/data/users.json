@@ -1,11 +1,11 @@
 [
   {
     "_id": "636d583e61459c5d49b58bf1",
-    "email": "carlosbaston82@gmail.com",
-    "fullName": "Carlos Baston",
+    "email": "testuser1@test.com",
+    "fullName": "Test User 1",
     "photo": "",
-    "password": "password123!@#",
-    "passwordConfirm": "password123!@#",
+    "password": "password",
+    "passwordConfirm": "password",
     "role": "subscriber",
     "active": true,
     "created_at": 1668110398674,
