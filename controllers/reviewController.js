@@ -22,6 +22,8 @@ exports.createReview = catchAsync(async (req, res, next) => {
     if (!req.body.event) req.body.event = req.params.eventId
     if (!req.body.user) req.body.user = toId(req.user.id)
 
+        console.log(req.body)
+
     const review = await Review.create({ user: toId(req.body._id), ...req.body }).then((t) =>
         t.populate({
             path: 'user',
@@ -47,6 +49,8 @@ exports.deleteReview = catchAsync(async (req, res, next) => {
 })
 
 exports.updateReview = catchAsync(async (req, res, next) => {
+
+    console.log(req.body)
     const review = await Review.findOneAndUpdate(
         { _id: req.params.id, user: req.user._id },
         {
