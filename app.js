@@ -128,6 +128,7 @@ app.use('/api/v1/media', mediaRouter)
 app.use('/api/v1/reviews', reviewRouter)
 
 
+
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl}`, 404))
 })
