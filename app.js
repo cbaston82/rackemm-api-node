@@ -127,6 +127,25 @@ app.use('/api/v1/stripe', stripeRouter)
 app.use('/api/v1/media', mediaRouter)
 app.use('/api/v1/reviews', reviewRouter)
 
+// TEMPORARY — remove after running once
+const Event = require('./models/eventModel')
+app.get('/api/v1/maintenance/fix-event-dates', async (req, res) => {
+    const futureDates = [
+        { startTime: '2026-05-10T16:00', endTime: '2026-05-11T23:59' },
+        { startTime: '2026-05-24T14:00', endTime: '2026-05-25T23:59' },
+        { startTime: '2026-06-07T16:00', endTime: '2026-06-08T23:59' },
+        { startTime: '2026-06-21T12:00', endTime: '2026-06-22T23:59' },
+        { startTime: '2026-07-04T16:00', endTime: '2026-07-05T23:59' },
+    ]
+    const events = await Event.find({ type: 'special' }).sort({ startTime: 1 })
+    for (let i = 0; i < events.length; i++) {
+        events[i].startTime = futureDates[i].startTime
+        events[i].endTime = futureDates[i].endTime
+        await events[i].save()
+    }
+    res.json({ status: 'success', updated: events.length })
+})
+
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl}`, 404))
 })
