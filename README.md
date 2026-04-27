@@ -2,7 +2,9 @@
 
 Node/Express REST API for the Rackemm pool tournament database.
 
-**Frontend repo:** [rackemm-ui](https://github.com/cbaston82/rackemm-ui)
+**Live API:** https://web-production-897fe.up.railway.app  
+**Frontend repo:** [rackemm-ui](https://github.com/cbaston82/rackemm-ui)  
+**Live site:** https://rackemm.netlify.app
 
 ## Tech Stack
 
@@ -14,7 +16,7 @@ Node/Express REST API for the Rackemm pool tournament database.
 ## Prerequisites
 
 - Node 16+
-- MongoDB running locally (`mongod`) — or swap to Atlas URI in `config.env`
+- MongoDB running locally (`mongod`)
 - [Stripe CLI](https://stripe.com/docs/stripe-cli) if testing webhooks locally
 
 ## Run Locally
@@ -29,7 +31,7 @@ npm run start:dev                   # runs on http://localhost:4000
 
 ### Seed / delete test data
 
-These scripts connect directly to MongoDB and only run in `NODE_ENV=development`.
+These scripts connect directly to local MongoDB and only run in `NODE_ENV=development`.
 
 ```bash
 # Import test data (events, users, filters, reviews, etc.)
@@ -47,37 +49,60 @@ stripe listen --forward-to localhost:4000/api/v1/stripe/webhook
 
 ## Environment Variables
 
-Create a `config.env` file in the project root:
+### Local (`config.env`)
 
 ```env
 NODE_ENV=development
 DOMAIN=http://localhost:3900
 PORT=4000
 
-# Use MONGO_URI_LOCAL for development, MONGO_URI (Atlas) for production
-MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/rackemm
 MONGO_URI_LOCAL=mongodb://127.0.0.1:27017/rackemm?directConnection=true
 
-# JWT
 JWT_SECRET=
 JWT_SECRET_EXPIRES_IN=3d
 JWT_COOKIE_EXPIRES_IN=3
 
-# Stripe — get these from your Stripe dashboard
 STRIPE_PUBLISHABLE_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 
-# Cloudinary — get these from your Cloudinary dashboard
 CLOUDINARY_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_UPLOAD_PRESET=
 CLOUDINARY_API_SECRET=
 
-# SendGrid — needed for password reset emails
 SENDGRID_API_KEY=
-SUPPORT_EMAIL=support@yourdomain.com
+SUPPORT_EMAIL=
 ```
+
+### Production (Railway environment variables)
+
+```env
+NODE_ENV=production
+DOMAIN=https://rackemm.netlify.app
+PORT=4000
+
+# Railway MongoDB — use the internal URL with authSource and directConnection
+MONGO_URI=mongodb://mongo:<password>@mongodb.railway.internal:27017/rackemm?authSource=admin&directConnection=true
+
+JWT_SECRET=
+JWT_SECRET_EXPIRES_IN=3d
+JWT_COOKIE_EXPIRES_IN=3
+
+STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+CLOUDINARY_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_UPLOAD_PRESET=
+CLOUDINARY_API_SECRET=
+
+SENDGRID_API_KEY=
+SUPPORT_EMAIL=
+```
+
+> **MongoDB note:** Railway's MongoDB internal hostname only works within the same Railway project. The `?authSource=admin&directConnection=true` params are required — without them the connection will fail with an authentication error.
 
 ### Required helper file
 
@@ -96,9 +121,21 @@ module.exports = { createCustomer }
 
 1. Push to GitHub
 2. Create a new project in [Railway](https://railway.app) and connect the repo
-3. Add environment variables in the Railway dashboard (same as `config.env` above, with `NODE_ENV=production` and your Atlas `MONGO_URI`)
-4. Railway auto-detects Node and runs `npm start`
-5. Add the Railway public URL to the CORS whitelist in `app.js` if using a custom domain
+3. Add a MongoDB service to the same Railway project
+4. Set `MONGO_URI` using the internal MongoDB URL (see production env vars above)
+5. Add all other production environment variables
+6. Railway runs `npm start` automatically
+7. Add your Railway public URL to the CORS whitelist in `app.js`
+
+## CORS Whitelist
+
+Allowed origins in production (`app.js`):
+
+- `https://www.rackemm.com`
+- `https://rackemm.netlify.app`
+- `https://web-production-897fe.up.railway.app`
+
+Add any new frontend domains here before deploying.
 
 ## API Routes
 
