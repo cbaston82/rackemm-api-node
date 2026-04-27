@@ -28,6 +28,7 @@ if (process.env.NODE_ENV === 'production') {
     const whitelist = [
         'https://www.rackemm.com',
         'https://rackemm.netlify.app',
+        'https://web-production-897fe.up.railway.app',
         'a.stripecdn.com',
         'api.stripe.com',
         'atlas.stripe.com',
