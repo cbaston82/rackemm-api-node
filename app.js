@@ -26,6 +26,7 @@ app.post('/api/v1/stripe/webhook', express.raw({ type: '*/*' }), stripeControlle
 
 if (process.env.NODE_ENV === 'production') {
     const whitelist = [
+        'https://rackemm.com',
         'https://www.rackemm.com',
         'https://rackemm.netlify.app',
         'https://web-production-897fe.up.railway.app',
