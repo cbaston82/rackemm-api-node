@@ -119,3 +119,5 @@ node_modules/
 .idea/
 config.env
 helpers/stripeHelpers.js
+# Local Netlify folder
+.netlify

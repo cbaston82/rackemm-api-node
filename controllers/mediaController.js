@@ -10,7 +10,7 @@ exports.uploadMedia = catchAsync(async (req, res, next) => {
     const { data, fileName } = req.body
 
     const response = await cloudinary.uploader.upload(data, {
-        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+        folder: 'rackemm_images',
         public_id: fileName,
         transformation: [{ background: '#292c31', width: 675, height: 1000, crop: 'pad' }],
     })
